@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white shadow-sm">
         <div class="container">
             <NuxtLink class="navbar-brand" to="/">
                 <img src="/images/logo.svg" alt="Logo">
@@ -21,10 +21,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <UiButton type="link" link="/" class="btn-outline-primary">Register</UiButton>
+                        <UiButton type="link" link="/" class="fw-semibold btn-outline-primary">Register</UiButton>
                     </li>
                     <li class="nav-item">
-                        <UiButton type="link" link="/" class="btn-primary">Login</UiButton>
+                        <UiButton type="link" link="/" class="fw-semibold btn-primary">Login</UiButton>
                     </li>
                 </ul>
             </div>
@@ -33,6 +33,10 @@
 </template>
 
 <style lang="scss" scoped>
+.navbar {
+    z-index: 1024;
+}
+
 .nav-item {
     padding: 0 .25rem;
 }

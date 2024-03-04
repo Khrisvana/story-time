@@ -2,8 +2,29 @@
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/mixins";
 
-$theme-colors: (
-  "primary": #343434,
-);
+$primary: #343434;
+$secondary: #8f8f8f;
+$light: #eee;
+
+$theme-colors: map-merge($theme-colors, (
+  "primary": $primary,
+  "secondary": $secondary,
+  "light": $light,
+));
+
+.input-group {
+
+  .form-control {
+    border-radius: 0;
+    &:hover, &:focus {
+      box-shadow: none;
+      border-color: $primary;
+    }
+  }
+
+  .input-group-text {
+    border-radius: 0;
+  }
+}
 
 @import "bootstrap/scss/bootstrap";

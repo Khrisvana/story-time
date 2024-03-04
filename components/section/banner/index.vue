@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
     <section class="hero">
         <div class="title">
@@ -8,9 +6,11 @@
                 <img src="/images/logo.svg" alt="Logo" />
             </h1>
             <p class="title__subtitle">
-                The world's most-loved social storytelling platform. Story time
-                connects a global community of 90 million readers and writers
-                through the power of story.
+                The world's most-loved social storytelling platform.
+            </p>
+            <p class="title__subtitle">
+                Story time connects a global community of 90 million readers and
+                writers through the power of story.
             </p>
         </div>
     </section>
@@ -37,6 +37,7 @@
     }
 
     &__subtitle {
+        margin-bottom: 0;
         font-size: 32px;
     }
 }

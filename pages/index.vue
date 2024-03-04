@@ -8,4 +8,8 @@ definePageMeta({
     <!-- SECTION BANNER -->
     <SectionBanner/>
     <!-- !SECTION BANNER -->
+
+    <!-- SECTION STORY-LIST -->
+    <SectionBannerStoryList/>
+    <!-- !SECTION STORY-LIST -->
 </template>
