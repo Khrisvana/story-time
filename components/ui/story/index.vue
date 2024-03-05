@@ -66,10 +66,6 @@ const createdAt = computed(() => {
     padding: 0;
     padding: 0 15px 25px 15px;
 
-    & .card {
-        box-shadow: v.$default-box-shadow;
-    }
-
     &:hover {
         & .story__bookmark {
             display: flex;

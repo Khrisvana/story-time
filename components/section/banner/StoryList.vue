@@ -33,7 +33,7 @@ const loadMore = async () => {
             <div class="col-12 col-lg-4">
                 <form @submit.prevent="updateData" class="input-group mb-3">
                     <input
-                        type="text"
+                        type="search"
                         class="form-control"
                         placeholder="Search story..."
                         aria-label="Search story..."

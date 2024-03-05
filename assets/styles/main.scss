@@ -16,6 +16,12 @@ $theme-colors: map-merge($theme-colors, (
   "light": $light,
 ));
 
+@import "bootstrap/scss/bootstrap";
+
+a {
+  text-decoration: none;
+}
+
 .input-group {
   .input-group-text {
     border-radius: 0;
@@ -28,6 +34,10 @@ $theme-colors: map-merge($theme-colors, (
   &:hover, &:focus {
     box-shadow: none!important;
     border-color: $primary!important;
+  }
+
+  &.is-invalid {
+    border-color: $danger!important;
   }
 }
 
@@ -44,6 +54,12 @@ select {
   }
 }
 
+.card {
+  border-radius: 0;
+  box-shadow: $default-box-shadow;
+  border: none;
+}
+
 .main-wrapper {
   margin-top: $default-content-margin-top;
 
@@ -52,5 +68,3 @@ select {
     min-height: calc(100vh - $default-content-margin-top);
   }
 }
-
-@import "bootstrap/scss/bootstrap";

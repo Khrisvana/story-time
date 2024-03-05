@@ -21,10 +21,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <UiButton type="link" link="/" class="fw-semibold btn-outline-primary">Register</UiButton>
+                        <UiButton type="nuxt-link" link="/register" class="fw-semibold btn-outline-primary">Register</UiButton>
                     </li>
                     <li class="nav-item">
-                        <UiButton type="link" link="/" class="fw-semibold btn-primary">Login</UiButton>
+                        <UiButton type="nuxt-link" link="/register" class="fw-semibold btn-primary">Login</UiButton>
                     </li>
                 </ul>
             </div>
