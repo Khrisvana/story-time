@@ -3,19 +3,19 @@ const route = useRoute()
 const instance = useStoryStore()
 const config = useRuntimeConfig()
 
-await instance.getStory(route.params.id)
+await useAsyncData(() => instance.getStory(route.params.id))
 
 const storyCover = computed(() => {
-    const story: any = instance.story ?? {}
+    const story: Story = instance.story ?? {}
 
     return {
-        img: config.public.baseURL + story.cover_image.url,
-        alt: story.cover_image.name,
+        img: config.public.baseURL + (story.cover_image.url ?? ''),
+        alt: story.cover_image.alternativeText,
     }
 })
 
 const authorPicture = computed(() => {
-    const story: any = instance.story ?? {}
+    const story: Story = instance.story ?? {}
 
     return {
         img: config.public.baseURL + story.author.profile_picture.url,
@@ -24,7 +24,7 @@ const authorPicture = computed(() => {
 })
 
 const createdAt = computed(() => {
-    const date = new Date(instance.story.createdAt)
+    const date = new Date(instance.story?.createdAt ?? '')
 
     const day = date.toLocaleDateString("en-US", { day: "2-digit" })
     const month = date.toLocaleDateString("en-US", { month: "long" })
@@ -49,6 +49,7 @@ const createdAt = computed(() => {
                         :src="storyCover.img"
                         :="storyCover.alt"
                     />
+                    <UiStoryBookmark class="fs-3"/>
                 </div>
 
                 <div
@@ -84,6 +85,14 @@ const createdAt = computed(() => {
 @use "assets/styles/main" as v;
 
 .story {
+    &__bookmark {
+        margin-top: .75rem;
+        margin-right: .75rem;
+        display: flex;
+        width: 55px;
+        height: 55px;
+    }
+
     &__image {
         width: 100%;
     }

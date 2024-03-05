@@ -30,10 +30,9 @@ export const useStoryStore = defineStore("storyStore", {
                 watch: false,
             }
 
-            const { data, meta } = await useApiFetch(`stories/${id}`, options)
+            const { data } = await useApiFetch(`stories/${id}`, options)
 
             this.story = data
-            this.meta = meta
         }
     },
 })

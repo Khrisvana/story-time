@@ -50,12 +50,7 @@ const createdAt = computed(() => {
                 <span class="badge text-bg-light">{{ story.category.name }}</span>
             </div>
 
-            <button class="btn story__bookmark shadow">
-                <Icon
-                    name="material-symbols-light:bookmark-add-outline"
-                    color="black"
-                />
-            </button>
+            <UiStoryBookmark />
         </div>
     </NuxtLink>
 </template>
@@ -83,19 +78,6 @@ const createdAt = computed(() => {
 
     &__bookmark {
         display: none;
-        margin: 0.25rem;
-        padding: 0.5rem;
-        width: 40px;
-        height: 40px;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 0;
-        right: 0;
-        background-color: white !important;
-        font-size: 20px;
-        border: none;
-        border-radius: 100%;
     }
 
     &__image {
