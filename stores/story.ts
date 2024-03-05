@@ -2,6 +2,7 @@ export const useStoryStore = defineStore("storyStore", {
     state: () => {
         return {
             stories: [] as Ref<any> | [],
+            story: {} as Ref<Story>,
             meta: {} as Ref<any> | {},
         }
     },
@@ -22,5 +23,17 @@ export const useStoryStore = defineStore("storyStore", {
                 this.stories = data
             }
         },
+
+        async getStory(id: number | string | string[], params?: object) {
+            const options = {
+                params: params,
+                watch: false,
+            }
+
+            const { data, meta } = await useApiFetch(`stories/${id}`, options)
+
+            this.story = data
+            this.meta = meta
+        }
     },
 })

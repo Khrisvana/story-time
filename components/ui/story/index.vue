@@ -1,17 +1,4 @@
 <script setup lang="ts">
-type Story = {
-    id: number
-    title: string,
-    content: string,
-
-    author: any,
-    category: any,
-    cover_image: any,
-    
-    createdAt: string,
-    updatedAt: string,
-}
-
 type Props = {
     story: Story
 }
@@ -41,7 +28,7 @@ const createdAt = computed(() => {
 </script>
 
 <template>
-    <div class="story" :="$attrs">
+    <NuxtLink class="story" :="$attrs" :to="`/story/${story.id}`">
         <div class="card h-100 rounded-0 border-0">
             <img
                 :src="storyThumbnail.img"
@@ -70,21 +57,22 @@ const createdAt = computed(() => {
                 />
             </button>
         </div>
-    </div>
+    </NuxtLink>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use "assets/styles/main" as v;
 
 .story {
     cursor: pointer;
+    text-decoration: none;
     position: relative;
     border-radius: 0;
     padding: 0;
     padding: 0 15px 25px 15px;
 
     & .card {
-        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+        box-shadow: v.$default-box-shadow;
     }
 
     &:hover {
