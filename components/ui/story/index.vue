@@ -1,11 +1,22 @@
 <script setup lang="ts">
-interface Props {
-    story: Ref | null
+type Story = {
+    id: number
+    title: string,
+    content: string,
+
+    author: any,
+    category: any,
+    cover_image: any,
+    
+    createdAt: string,
+    updatedAt: string,
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    story: null,
-})
+type Props = {
+    story: Story
+}
+
+const props = defineProps<Props>()
 
 const config = useRuntimeConfig()
 
@@ -17,11 +28,21 @@ const storyThumbnail = computed(() => {
         alt: story.cover_image.formats.thumbnail.name,
     }
 })
+
+const createdAt = computed(() => {
+    const date = new Date(props.story.createdAt)
+
+    const day = date.toLocaleDateString('en-US', { day: '2-digit'})
+    const month = date.toLocaleDateString('en-US', { month: 'short'})
+    const year = date.toLocaleDateString('en-US', { year: '2-digit'})
+
+    return `${day} ${month} ${year}`
+})
 </script>
 
 <template>
     <div class="story" :="$attrs">
-        <div class="card">
+        <div class="card h-100 rounded-0 border-0">
             <img
                 :src="storyThumbnail.img"
                 class="story__image"
@@ -29,23 +50,20 @@ const storyThumbnail = computed(() => {
             />
             <div class="card-body">
                 <h5 class="card-title story__title">
-                    Harry Potter and the Chamber of Secrets
+                    {{ story.title }}
                 </h5>
                 <p class="card-text story__text">
-                    Harry Potter and the Chamber of Secrets is a fantasy novel
-                    written by British author J. K. Rowling and the second novel
-                    in the Harry Potter series. The plot follows Harry's second
-                    year at Hogwarts School of Witchcraft and Wizardry,
+                    {{ story.content }}
                 </p>
 
                 <div class="story__author">
-                    <p><small>by [Name]</small></p>
-                    <p><small>17 Jul 23</small></p>
+                    <p><small>by {{ story.author.username }}</small></p>
+                    <p><small>{{ createdAt }}</small></p>
                 </div>
-                <span class="badge text-bg-light">Light</span>
+                <span class="badge text-bg-light">{{ story.category.name }}</span>
             </div>
 
-            <button class="btn story__bookmark">
+            <button class="btn story__bookmark shadow">
                 <Icon
                     name="material-symbols-light:bookmark-add-outline"
                     color="black"
@@ -59,17 +77,28 @@ const storyThumbnail = computed(() => {
 @use "assets/styles/main" as v;
 
 .story {
+    cursor: pointer;
     position: relative;
     border-radius: 0;
     padding: 0;
     padding: 0 15px 25px 15px;
 
+    & .card {
+        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    &:hover {
+        & .story__bookmark {
+            display: flex;
+        }
+    }
+
     &__bookmark {
+        display: none;
         margin: 0.25rem;
         padding: 0.5rem;
         width: 40px;
         height: 40px;
-        display: flex;
         align-items: center;
         justify-content: center;
         position: absolute;

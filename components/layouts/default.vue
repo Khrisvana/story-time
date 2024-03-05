@@ -1,11 +1,11 @@
-<script lang="ts" setup>
-</script>
+<script lang="ts" setup></script>
 
 <template>
-    <div class="mb-5">
-        <UiNavbar/>
-        <div class="container">
-            <slot/>
+    <div>
+        <UiNavbar />
+        <div class="container mb-5">
+            <slot />
         </div>
+        <UiFooter />
     </div>
 </template>

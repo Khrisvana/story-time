@@ -1,37 +1,67 @@
 <script setup lang="ts">
-interface Props {
-    type: string,
-    link: string,
+type Props = {
+    type: string
+    link?: string
+    loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    type: 'button',
-    link: '',
+    type: "button",
+    link: "",
+    loading: false,
 })
 </script>
 
 <template>
-    <button v-if="type == 'button'" type="button" class="btn" :class="$attrs">
-        <slot />
+    <button
+        v-if="type == 'button'"
+        type="button"
+        class="btn"
+        :class="$attrs"
+        :disabled="loading"
+    >
+        <slot v-if="!loading" />
+        <UiButtonLoading v-else />
     </button>
 
-    <button v-else-if="type == 'submit'" type="submit" class="btn" :class="$attrs">
-        <slot />
+    <button
+        v-else-if="type == 'submit'"
+        type="submit"
+        class="btn"
+        :class="$attrs"
+        :disabled="loading"
+    >
+        <slot v-if="!loading" />
+        <UiButtonLoading v-else />
     </button>
 
-    <NuxtLink v-else-if="type == 'nuxt-link'" :to="link" class="btn" :class="$attrs">
-        <slot />
+    <NuxtLink
+        v-else-if="type == 'nuxt-link'"
+        :to="link"
+        class="btn"
+        :class="$attrs"
+        :disabled="loading"
+    >
+        <slot v-if="!loading" />
+        <UiButtonLoading v-else />
     </NuxtLink>
 
-    <a v-else-if="type == 'link'" :href="link" class="btn" :class="$attrs">
-        <slot />
+    <a
+        v-else-if="type == 'link'"
+        :href="link"
+        class="btn"
+        :class="$attrs"
+        :disabled="loading"
+    >
+        <slot v-if="!loading" />
+        <UiButtonLoading v-else />
     </a>
 </template>
 
 <style lang="scss" scoped>
-    .btn {
-        border-radius: 0;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
-    }
+.btn {
+    border-radius: 0;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
 </style>

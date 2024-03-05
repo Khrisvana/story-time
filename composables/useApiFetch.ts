@@ -3,5 +3,5 @@ export const useApiFetch: any = async (url: any, options?: any) => {
 
     const baseURL = `${config.public.baseURL}/api/`
 
-    return await useFetch(url, { baseURL: baseURL, ...options })
+    return await $fetch(url, { baseURL: baseURL, ...options })
 } 
