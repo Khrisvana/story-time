@@ -5,6 +5,7 @@
 $primary: #343434;
 $secondary: #8f8f8f;
 $light: #eee;
+$white: #fff;
 
 $default-content-margin-top: 74px;
 $default-content-padding-top: 22px;
@@ -14,6 +15,7 @@ $theme-colors: map-merge($theme-colors, (
   "primary": $primary,
   "secondary": $secondary,
   "light": $light,
+  "white": $white,
 ));
 
 @import "bootstrap/scss/bootstrap";

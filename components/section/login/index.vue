@@ -44,7 +44,7 @@ const formFields: Ref<Array<DynamicField>> = ref(fields)
 </template>
 
 <style lang="scss" scoped>
-.register {
+.login {
     &__success-img {
         width: 50%;
         max-width: 100%;

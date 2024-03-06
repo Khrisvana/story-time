@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-const props = defineProps<{ user: any }>()
+const auth = useAuthStore()
+
+await useAsyncData(() => auth.getUser())
 </script>
 
 <template>
@@ -22,7 +24,7 @@ const props = defineProps<{ user: any }>()
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0" v-if="!user">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0" v-if="!auth.user_profile">
                     <li class="nav-item">
                         <UiButton
                             type="nuxt-link"
@@ -44,10 +46,10 @@ const props = defineProps<{ user: any }>()
                     <li class="nav-item">
                         <UiButton
                             type="nuxt-link"
-                            link="/register"
+                            link="/user"
                             class="fw-semibold btn-primary d-flex align-items-center"
                             ><Icon name="material-symbols:account-circle" class="me-2 fs-5" />{{
-                                user?.name
+                                auth.user_profile?.name
                             }}</UiButton
                         >
                     </li>
