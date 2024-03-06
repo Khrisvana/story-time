@@ -1,3 +1,5 @@
+import ApiException from "~/exceptions/ApiException"
+
 export const useStoryStore = defineStore("storyStore", {
     state: () => {
         return {
@@ -12,7 +14,7 @@ export const useStoryStore = defineStore("storyStore", {
                 params: params,
                 watch: false,
             }
-            
+
             const currentMeta = this.meta.page
             const { data, meta } = await useApiFetch("stories", options)
 
@@ -33,6 +35,6 @@ export const useStoryStore = defineStore("storyStore", {
             const { data } = await useApiFetch(`stories/${id}`, options)
 
             this.story = data
-        }
+        },
     },
 })

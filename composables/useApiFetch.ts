@@ -25,8 +25,8 @@ export const useApiFetch = async (url: any, opt?: any) => {
                 options.headers = headers
             },
             async onResponseError({ request, options, response } : FetchContext) {
-                /* Remove Cookie on Error Code 401 Above */
-                if (response && response.status >= 401) {
+                /* Remove Cookie on Error Code 401 */
+                if (response && response.status == 401) {
                     jwt.value = null
                 }
             },

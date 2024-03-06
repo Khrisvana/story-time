@@ -5,12 +5,19 @@ const config = useRuntimeConfig()
 
 await useAsyncData(() => instance.getStory(route.params.id))
 
+if (!instance.story) {
+    throw createError({
+        statusCode: 404,
+        statusMessage: "Page Not Found",
+    })    
+}
+
 const storyCover = computed(() => {
     const story: Story = instance.story ?? {}
 
     return {
-        img: config.public.baseURL + (story.cover_image.url ?? ''),
-        alt: story.cover_image.alternativeText,
+        img: config.public.baseURL + (story.cover_image?.url ?? ''),
+        alt: story.cover_image?.alternativeText,
     }
 })
 
@@ -18,8 +25,8 @@ const authorPicture = computed(() => {
     const story: Story = instance.story ?? {}
 
     return {
-        img: config.public.baseURL + story.author.profile_picture.url,
-        alt: story.author.profile_picture.name,
+        img: config.public.baseURL + (story.author?.profile_picture?.url ?? ''),
+        alt: story.author?.profile_picture?.name ?? '',
     }
 })
 
@@ -69,10 +76,10 @@ const createdAt = computed(() => {
 
                     <div class="text-center">
                         <p class="mb-0 fw-semibold">
-                            {{ instance.story.author.name }}
+                            {{ instance.story.author?.name ?? '' }}
                         </p>
                         <p class="text-secondary mb-0">
-                            {{ instance.story.author.biodata }}
+                            {{ instance.story.author?.biodata ?? '' }}
                         </p>
                     </div>
                 </div>
