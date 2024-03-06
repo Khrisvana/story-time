@@ -65,15 +65,17 @@ const loadMore = async () => {
         </div>
         <div class="row">
             <UiStory
+                v-if="story.stories.length > 0"
                 class="col-6 col-lg-3"
                 v-for="item in story.stories"
                 :key="item.id"
                 :story="item"
             />
+            <UiDataNotFound v-else/>
         </div>
         <div class="d-flex w-100 justify-content-center">
             <UiButton
-                v-if="story.meta.pageCount != story.meta.page"
+                v-if="story.stories.length > 0 && story.meta.pageCount != story.meta.page"
                 type="button"
                 class="fw-semibold btn-outline-primary"
                 :loading="isLoading"
