@@ -4,8 +4,6 @@ type Props = {
     id?: string
     name: string
     placeholder?: string
-    rules: any
-    error?: any
 }
 
 const model = defineModel()
@@ -26,29 +24,27 @@ const toggleShowPassword = () => {
 </script>
 
 <template>
-    <div>
-        <label v-if="label" :for="id" class="form-label">{{ label }}</label>
-        <div class="input-group password">
-            <Field
-                as="input"
+    <label v-if="label" :for="id" class="form-label">{{ label }}</label>
+    <div class="input-group password">
+        <Field :name v-slot="{ errors, field }" v-bind="$attrs">
+            <input
                 :id
-                :name
+                v-bind="field"
                 :placeholder
-                :rules
                 :type
                 class="form-control border-end-0 password__input"
-                :class="{'is-invalid': error}"
+                :class="{ 'is-invalid': errors.length > 0 }"
                 v-model="model"
             />
-            <UiButton
-                class="input-group-text text-secondary border border-start-0 fs-5 password__toggle"
-                @click="toggleShowPassword"
-                type="button"
-                ><Icon :name="icon"
-            /></UiButton>
-        </div>
-        <ErrorMessage :name class="d-block invalid-feedback"/>
+        </Field>
+        <UiButton
+            class="input-group-text text-secondary border border-start-0 fs-5 password__toggle"
+            @click="toggleShowPassword"
+            type="button"
+            ><Icon :name="icon"
+        /></UiButton>
     </div>
+    <ErrorMessage :name class="d-block invalid-feedback" />
 </template>
 
 <style lang="scss" scoped>
@@ -70,6 +66,10 @@ const toggleShowPassword = () => {
         align-items: center;
         padding-left: 1rem;
         padding-right: 1rem;
+
+        #{$p}__input.is-invalid ~ & {
+            border-color: v.$danger !important;
+        }
     }
 }
 </style>

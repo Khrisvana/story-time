@@ -1,47 +1,48 @@
 <script setup lang="ts">
-type DynamicField = {
-    label?: string
-    id: string
-    name: string
-    as: string
-    type: string
-    placeholder: string
-}
-
-type DynamicInputSchema = {
+type Props = {
     fields: DynamicField[]
 }
 
-type Props = {
-    schema: any
-    errors: any
-}
-
 const props = defineProps<Props>()
-const pppp = computed(() => {
-    const test = props.errors
-    return  test
-})
 </script>
 <template>
-    <div class="mb-3" v-for="{ id, as, name, label, children, placeholder, type,  ...attrs } in schema.fields" :key="name">
+    <div
+        class="mb-3"
+        v-for="{
+            id,
+            name,
+            label,
+            placeholder,
+            type,
+            ...attrs
+        } in fields"
+        :key="name"
+    >
         <label :for="id" class="form-label">{{ label }}</label>
 
-        <!-- INPUTS -->
+        <!-- INPUT -->
         <Field
             v-if="type != 'password'"
-            :as
-            :id
             :name
-            :type
-            v-bind="attrs"
-            required
-            class="form-control"
-            :class="{'is-invalid': errors[name]}"
-            :placeholder
-            :aria-label="placeholder"
-        />
+            v-slot="{ errors, field }"
+            :="attrs"
+        >
+            <input
+                :id
+                :type
+                v-bind="field"
+                required
+                class="form-control"
+                :class="{ 'is-invalid': errors.length > 0 }"
+                :placeholder
+                :aria-label="placeholder"
+            />
 
+            <ErrorMessage v-bind="field" class="d-block invalid-feedback" />
+        </Field>
+        <!-- INPUT -->
+
+        <!-- PASSWORD INPUT -->
         <UiInputPassword
             v-else-if="type == 'password'"
             class="mb-3"
@@ -51,12 +52,7 @@ const pppp = computed(() => {
             :type
             :placeholder
             :aria-label="placeholder"
-            :error="errors[name]"
         />
-        <!-- !INPUTS -->
-        {{pppp}}
-        <!-- ERROR MESSAGE -->
-        <ErrorMessage :name class="d-block invalid-feedback" v-if=" type != 'password'"/>
-        <!-- !ERROR MESSAGE -->
+        <!-- !PASSWORD INPUT -->
     </div>
 </template>

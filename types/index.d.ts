@@ -11,6 +11,18 @@ declare global {
         createdAt: string,
         updatedAt: string,
     }    
+
+    type DynamicField = {
+        label?: string
+        id: string
+        name: string
+        type: string
+        placeholder: string
+    }
+    
+    type DynamicInputSchema = {
+        fields: DynamicField[]
+    }
 }
 
 export {}
