@@ -10,6 +10,7 @@
         "postinstall": "nuxt prepare"
     },
     "dependencies": {
+        "@nuxt/types": "^2.17.3",
         "@pinia/nuxt": "^0.5.1",
         "@vee-validate/nuxt": "^4.12.5",
         "@vee-validate/yup": "^4.12.5",

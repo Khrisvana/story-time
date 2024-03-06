@@ -20,7 +20,7 @@ export let fields = [
         label: "Username",
         id: "id-username",
         name: "username",
-        type: "input",
+        type: "text",
         placeholder: "Enter username",
     },
     {
