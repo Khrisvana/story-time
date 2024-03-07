@@ -39,6 +39,7 @@ declare global {
         name: string
         type: string
         placeholder: string
+        disabled?: boolean
     }
 
     interface IDynamicInputSchema {

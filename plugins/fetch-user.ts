@@ -8,4 +8,10 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
 
     fetchUser()
+
+    return {
+        provide: {
+            fetchUser: fetchUser
+        }
+    }
 })

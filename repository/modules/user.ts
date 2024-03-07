@@ -32,6 +32,19 @@ class UserModule extends FetchFactory<any> {
             )
         }, asyncDataOptions)
     }
+
+    async updateUser(
+        payload: object | FormData,
+        opt?: FetchOptions<"json">
+    ) {
+        const url = `${this.RESOURCE}`
+        return await this.call(
+            "PATCH",
+            url,
+            payload, // body
+            opt,
+        )
+    }
 }
 
 export default UserModule

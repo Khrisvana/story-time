@@ -4,6 +4,7 @@ type Props = {
     id?: string
     name: string
     placeholder?: string
+    disabled?: boolean
 }
 
 const model = defineModel()
@@ -30,6 +31,7 @@ const toggleShowPassword = () => {
             <input
                 :id
                 v-bind="field"
+                :disabled="disabled"
                 :placeholder
                 :type
                 class="form-control border-end-0 password__input"
