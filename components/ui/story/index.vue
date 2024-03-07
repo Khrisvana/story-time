@@ -1,6 +1,6 @@
 <script setup lang="ts">
 type Props = {
-    story: Story
+    story: IStory
 }
 
 const props = defineProps<Props>()

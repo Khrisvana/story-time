@@ -2,8 +2,11 @@
 import ApiException from "~/exceptions/ApiException"
 import { fields, validationSchema } from "~/forms/RegisterForm"
 
+const { $api } = useNuxtApp()
 const toast = useToast()
-const auth = useAuthStore()
+
+const isLoading = ref(false)
+
 const { handleSubmit } = useForm({
     validationSchema: validationSchema,
 })
@@ -11,7 +14,8 @@ const registrationSuccess = ref(false)
 
 const submitForm = handleSubmit(async (values) => {
     try {
-        await auth.register(values)
+        isLoading.value = true
+        await $api.auth.register(values)
         registrationSuccess.value = true
     } catch (error: any) {
         if (error instanceof ApiException) {
@@ -19,10 +23,12 @@ const submitForm = handleSubmit(async (values) => {
         } else {
             console.log(error)
         }
+    } finally {
+        isLoading.value = false
     }
 })
 
-const formFields: Ref<Array<DynamicField>> = ref(fields)
+const formFields: Ref<Array<IDynamicField>> = ref(fields)
 </script>
 
 <template>
@@ -36,7 +42,10 @@ const formFields: Ref<Array<DynamicField>> = ref(fields)
             <h1 class="fs-3 fw-semibold">Register</h1>
             <UiDynamicForm :fields="formFields" />
 
-            <UiButton type="submit" class="btn-primary fs-5 mb-3 fw-semibold"
+            <UiButton
+                :loading="isLoading"
+                type="submit"
+                class="btn-primary fs-5 mb-3 fw-semibold"
                 >Register</UiButton
             >
             <p>

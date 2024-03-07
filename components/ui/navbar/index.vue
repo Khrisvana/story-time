@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-const auth = useAuthStore()
-
-await useAsyncData(() => auth.getUser())
+const user = useUserStore()
 </script>
 
 <template>
@@ -24,7 +22,7 @@ await useAsyncData(() => auth.getUser())
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0" v-if="!auth.user_profile">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0" v-if="!user.user">
                     <li class="nav-item">
                         <UiButton
                             type="nuxt-link"
@@ -49,7 +47,7 @@ await useAsyncData(() => auth.getUser())
                             link="/user"
                             class="fw-semibold btn-primary d-flex align-items-center"
                             ><Icon name="material-symbols:account-circle" class="me-2 fs-5" />{{
-                                auth.user_profile?.name
+                                user.user?.name
                             }}</UiButton
                         >
                     </li>

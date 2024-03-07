@@ -1,37 +1,43 @@
 <script setup lang="ts">
+const { $api } = useNuxtApp()
+
 const route = useRoute()
-const instance = useStoryStore()
 const config = useRuntimeConfig()
 
-await useAsyncData(() => instance.getStory(route.params.id))
+const { data: story, pending } = await $api.stories.getStory(route.params.id)
 
-if (!instance.story) {
+if (!story) {
     throw createError({
         statusCode: 404,
         statusMessage: "Page Not Found",
     })    
 }
 
+const storyDetail = computed(() => {
+    return story.value?.data
+})
+
 const storyCover = computed(() => {
-    const story: Story = instance.story ?? {}
+    const data = story.value?.data
 
     return {
-        img: config.public.baseURL + (story.cover_image?.url ?? ''),
-        alt: story.cover_image?.alternativeText,
+        img: config.public.baseURL + (data!.cover_image?.url ?? ''),
+        alt: data!.cover_image?.alternativeText,
     }
 })
 
 const authorPicture = computed(() => {
-    const story: Story = instance.story ?? {}
+    const data = story.value?.data
 
     return {
-        img: config.public.baseURL + (story.author?.profile_picture?.url ?? ''),
-        alt: story.author?.profile_picture?.name ?? '',
+        img: config.public.baseURL + (data!.author?.profile_picture?.url ?? ''),
+        alt: data!.author?.profile_picture?.name ?? '',
     }
 })
 
 const createdAt = computed(() => {
-    const date = new Date(instance.story?.createdAt ?? '')
+    const data = story.value?.data
+    const date = new Date(data!.createdAt ?? '')
 
     const day = date.toLocaleDateString("en-US", { day: "2-digit" })
     const month = date.toLocaleDateString("en-US", { month: "long" })
@@ -46,7 +52,7 @@ const createdAt = computed(() => {
         <div class="content row">
             <div class="col-12 col-md-8 story">
                 <h2 class="mt-3 fw-bold">
-                    {{ instance.story.title }}
+                    {{ storyDetail!.title }}
                 </h2>
                 <p class="text-secondary mb-3">{{ createdAt }}</p>
 
@@ -61,7 +67,7 @@ const createdAt = computed(() => {
 
                 <div
                     class="story__content mt-3"
-                    v-html="instance.story.content"
+                    v-html="storyDetail!.content"
                 ></div>
             </div>
             <div class="col-12 col-md-4 position-relative">
@@ -76,10 +82,10 @@ const createdAt = computed(() => {
 
                     <div class="text-center">
                         <p class="mb-0 fw-semibold">
-                            {{ instance.story.author?.name ?? '' }}
+                            {{ storyDetail!.author?.name ?? '' }}
                         </p>
                         <p class="text-secondary mb-0">
-                            {{ instance.story.author?.biodata ?? '' }}
+                            {{ storyDetail!.author?.biodata ?? '' }}
                         </p>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 type Props = {
-    type: string
+    type?: string
     link?: string
     loading?: boolean
 }

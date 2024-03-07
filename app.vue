@@ -2,10 +2,6 @@
 useSeoMeta({
     title: "Story Time",
 })
-
-const auth = useAuthStore()
-
-await useAsyncData(() => auth.getUser())
 </script>
 
 <template>
