@@ -18,10 +18,7 @@ class AuthModule extends FetchFactory<any> {
      * @param asyncDataOptions options for `useAsyncData`
      * @returns
      */
-    async register(
-        payload: object | FormData,
-        opt?: FetchOptions<"json">,
-    ) {
+    async register(payload: object | FormData, opt?: FetchOptions<"json">) {
         const url = `${this.RESOURCE}/register`
 
         return this.call(
@@ -32,17 +29,20 @@ class AuthModule extends FetchFactory<any> {
         )
     }
 
-    async login(
-        payload: object | FormData,
-        opt?: FetchOptions<"json">,
-    ) {
+    async login(payload: object | FormData, opt?: FetchOptions<"json">) {
         const url = `${this.RESOURCE}`
-        return this.call(
-            "POST",
-            url,
-            payload, // body
-            opt,
-        )
+        const response = await useAsyncData(async () => {
+            return this.call(
+                "POST",
+                url,
+                payload, // body
+                opt,
+            )
+        })
+
+        const jwt = useCookie("jwt")
+        jwt.value = response.data.value.data.jwt ?? null
+        return response
     }
 }
 

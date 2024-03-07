@@ -14,7 +14,6 @@ const pagination: Ref<IPagination | undefined> = ref()
 const pending: Ref<boolean> = ref(false)
 
 const fetchStories = async (loadMore: boolean = false) => {
-    
     if (loadMore) {
         queryParams.value.page += 1
     } else {
@@ -26,7 +25,7 @@ const fetchStories = async (loadMore: boolean = false) => {
         params: queryParams.value,
     })
     pending.value = false
-    
+
     pagination.value = stories.value.meta.pagination
     if (queryParams.value.page > 1) {
         list.value.push(...stories.value?.data)
@@ -88,7 +87,9 @@ await fetchStories()
         </div>
         <div class="d-flex w-100 justify-content-center">
             <UiButton
-                v-if="list.length > 0 && pagination?.pageCount != pagination?.page"
+                v-if="
+                    list.length > 0 && pagination?.pageCount != pagination?.page
+                "
                 type="button"
                 class="fw-semibold btn-outline-primary"
                 :loading="pending"

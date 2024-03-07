@@ -44,10 +44,7 @@ const profilePicture = computed(() => {
                             alt="profile picture"
                         />
                     </div>
-                    <UiButton
-                        class="profile__img-upload btn-outline-primary fw-semibold"
-                        >Change Avatar</UiButton
-                    >
+                    <SectionUserAvatar/>
                 </div>
                 <div class="col-lg-8 col-12">
                     <table class="profile__detail" v-if="!display.edit_user">
@@ -103,11 +100,6 @@ const profilePicture = computed(() => {
         min-height: 200px;
         max-width: 100%;
         max-height: 100%;
-
-        &-upload {
-            min-width: 200px;
-            max-width: 100%;
-        }
     }
 
     &__detail {

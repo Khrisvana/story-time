@@ -20,7 +20,7 @@ class UserModule extends FetchFactory<any> {
      */
     async getUser(
         opt?: FetchOptions<"json">,
-        asyncDataOptions?: AsyncDataOptions<IApiResponse>
+        asyncDataOptions?: AsyncDataOptions<IApiResponse>,
     ) {
         return await useAsyncData(async () => {
             const url = `${this.RESOURCE}`
@@ -28,15 +28,12 @@ class UserModule extends FetchFactory<any> {
                 "GET",
                 url,
                 undefined, // body
-                opt,
+                opt
             )
         }, asyncDataOptions)
     }
 
-    async updateUser(
-        payload: object | FormData,
-        opt?: FetchOptions<"json">
-    ) {
+    async updateUser(payload: object | FormData, opt?: FetchOptions<"json">) {
         const url = `${this.RESOURCE}`
         return await this.call(
             "PATCH",

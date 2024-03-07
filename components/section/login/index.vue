@@ -4,6 +4,7 @@ import { fields, validationSchema } from "~/forms/LoginForm"
 
 const jwt = useCookie("jwt")
 const { $api } = useNuxtApp()
+const userStore = useUserStore()
 const toast = useToast()
 const { handleSubmit } = useForm({
     validationSchema: validationSchema,
@@ -14,8 +15,11 @@ const isLoading = ref(false)
 const submitForm = handleSubmit(async (values) => {
     try {
         isLoading.value = true
-        const result = await $api.auth.login(values)
-        jwt.value = result.data.jwt ?? null
+        await $api.auth.login(values)
+
+        const { data: userData } = await $api.user.getUser()
+        userStore.setUserProfile(userData.value?.data)
+
         await navigateTo({ path: "/" })
     } catch (error: any) {
         if (error instanceof ApiException) {

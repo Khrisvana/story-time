@@ -3,9 +3,10 @@ import ApiException from "~/exceptions/ApiException"
 import { fields, validationSchema } from "~/forms/UserDetailForm"
 
 const toast = useToast()
-const { $api, $fetchUser } = useNuxtApp()
+const { $api } = useNuxtApp()
 
 const props = defineProps<{ user: IUser | null }>()
+const userStore = useUserStore()
 
 const { handleSubmit } = useForm({
     validationSchema: validationSchema,
@@ -13,7 +14,7 @@ const { handleSubmit } = useForm({
         name: props.user?.name,
         email: props.user?.email,
         biodata: props.user?.biodata,
-    }
+    },
 })
 
 const model: any | undefined = defineModel()
@@ -24,7 +25,8 @@ const submitForm = handleSubmit(async (values) => {
     try {
         isLoading.value = true
         await $api.user.updateUser(values)
-        await $fetchUser()
+        const { data: userData } = await $api.user.getUser()
+        userStore.setUserProfile(userData.value?.data)
     } catch (error: any) {
         if (error instanceof ApiException) {
             toast.error(error.data().error.message)
