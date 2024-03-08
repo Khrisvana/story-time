@@ -16,7 +16,7 @@ const userStore = useUserStore()
         >
         <UiButton
             type="nuxt-link"
-            to="/user"
+            to="/user/story"
             class="sidebar__btn btn-outline-light"
             ><Icon
                 name="material-symbols-light:list-alt-outline"
@@ -25,7 +25,7 @@ const userStore = useUserStore()
         >
         <UiButton
             type="nuxt-link"
-            to="/user"
+            to="/user/bookmark"
             class="sidebar__btn btn-outline-light border-bottom-0"
             ><Icon
                 name="material-symbols:bookmark-outline"
