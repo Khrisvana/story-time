@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+definePageMeta({
+    middleware: ["unauthenticated"],
+})
+</script>
 
 <template>
     <div class="main-wrapper">
