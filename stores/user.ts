@@ -8,5 +8,13 @@ export const useUserStore = defineStore("userStore", {
         setUserProfile(user: IUser) {
             this.user = user
         },
+        async logout() {
+            const jwt = useCookie('jwt')
+            this.user = null
+
+            jwt.value = null
+
+            return await navigateTo('/')
+        }
     },
 })

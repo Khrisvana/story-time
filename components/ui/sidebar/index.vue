@@ -1,17 +1,31 @@
+<script lang="ts" setup>
+const userStore = useUserStore()
+</script>
+
 <template>
     <aside class="card sidebar d-flex flex-column p-0">
-        <UiButton type="button" class="sidebar__btn btn-outline-light"
-            ><Icon name="material-symbols:account-circle-outline" class="fs-5 me-2" />
+        <UiButton
+            type="nuxt-link"
+            to="/user"
+            class="sidebar__btn btn-outline-light"
+            ><Icon
+                name="material-symbols:account-circle-outline"
+                class="fs-5 me-2"
+            />
             My Profile</UiButton
         >
-        <UiButton type="button" class="sidebar__btn btn-outline-light"
+        <UiButton
+            type="nuxt-link"
+            to="/user"
+            class="sidebar__btn btn-outline-light"
             ><Icon
                 name="material-symbols-light:list-alt-outline"
                 class="fs-5 me-2"
             />Story List</UiButton
         >
         <UiButton
-            type="button"
+            type="nuxt-link"
+            to="/user"
             class="sidebar__btn btn-outline-light border-bottom-0"
             ><Icon
                 name="material-symbols:bookmark-outline"
@@ -20,10 +34,12 @@
         >
         <div class="w-100 px-2 py-2">
             <UiButton
+                @click="userStore.logout"
                 type="button"
-                class="sidebar__btn btn-outline-danger fw-semibold"
-                >Logout</UiButton
-            >
+                class="sidebar__btn btn-outline-danger fw-semibold d-flex justify-content-between"
+                ><span>Logout</span>
+                <Icon name="material-symbols:logout-rounded" class="fs-5"
+            /></UiButton>
         </div>
     </aside>
 </template>
