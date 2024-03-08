@@ -26,6 +26,12 @@ declare global {
         profile_picture: any
     }
 
+    interface IResetPassword {
+        old_password: string,
+        password: string,
+        password_confirmation:string 
+    }
+
     interface IPagination {
         page: number
         pageSize: number

@@ -12,6 +12,7 @@ type IApiResponse = {
 
 class UserModule extends FetchFactory<any> {
     private RESOURCE = "/users/me"
+    private UPLOAD = '/upload'
 
     /**
      * Return the stories as array
@@ -43,8 +44,18 @@ class UserModule extends FetchFactory<any> {
         )
     }
 
+    async resetPassword(payload: object | FormData, opt?: FetchOptions<"json">) {
+        const url = `${this.RESOURCE}/reset-password`
+        return await this.call(
+            "POST",
+            url,
+            payload, // body
+            opt,
+        )
+    }
+
     async uploadProfile(payload: object | FormData, opt?: FetchOptions<"json">) {
-        const url = `/upload`
+        const url = `${this.UPLOAD}`
         return await this.call(
             "POST",
             url,
@@ -54,7 +65,7 @@ class UserModule extends FetchFactory<any> {
     }
 
     async deleteProfilePicture(profile_pic_id: string, opt?: FetchOptions<"json">) {
-        const url = `/upload/files/${profile_pic_id}`
+        const url = `${this.UPLOAD}/files/${profile_pic_id}`
         return await this.call(
             "DELETE",
             url,

@@ -1,9 +1,9 @@
 import { string, object } from "yup"
 
 export const validationSchema = object().shape({
-    name: string().required(),
-    email: string().email().required(),
-    biodata: string().nullable(),
+    name: string().required().label('Name'),
+    email: string().email().required().label('Email'),
+    biodata: string().nullable().label('Biodata'),
 })
 
 export let fields = [

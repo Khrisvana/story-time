@@ -9,4 +9,8 @@ definePageMeta({
     <!-- SECTION USER -->
     <SectionUser />
     <!-- !SECTION USER -->
+
+    <!-- USER PASSWORD -->
+    <SectionUserPassword/>
+    <!-- !USER PASSWORD -->
 </template>

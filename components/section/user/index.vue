@@ -2,10 +2,7 @@
 const store = useUserStore()
 const config = useRuntimeConfig()
 
-const display = ref({
-    edit_user: false,
-    change_password: false,
-})
+const displayEdit = ref(false)
 
 const profilePicture = computed(() => {
     if (!store.user?.profile_picture?.url) {
@@ -25,8 +22,8 @@ const profilePicture = computed(() => {
                     <UiButton
                         type="button"
                         class="btn-outline-primary d-flex align-items-center"
-                        v-if="!display.edit_user"
-                        @click="display.edit_user = true"
+                        v-if="!displayEdit"
+                        @click="displayEdit = true"
                         ><Icon
                             name="material-symbols:edit-square-outline"
                             class="me-2"
@@ -47,7 +44,7 @@ const profilePicture = computed(() => {
                     <SectionUserAvatar />
                 </div>
                 <div class="col-lg-8 col-12">
-                    <table class="profile__detail" v-if="!display.edit_user">
+                    <table class="profile__detail" v-if="!displayEdit">
                         <tbody>
                             <tr>
                                 <th>Name</th>
@@ -65,28 +62,9 @@ const profilePicture = computed(() => {
                     </table>
                     <SectionUserForm
                         v-else
-                        v-model="display.edit_user"
+                        v-model="displayEdit"
                         :user="store.user"
                     />
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-                <h3 class="mb-0">Password</h3>
-                <div>
-                    <UiButton
-                        type="button"
-                        class="btn-outline-primary d-flex align-items-center"
-                        ><Icon
-                            name="material-symbols:edit-square-outline"
-                            class="me-2"
-                        />
-                        Change Password</UiButton
-                    >
                 </div>
             </div>
         </div>

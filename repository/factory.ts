@@ -1,5 +1,6 @@
 // 3rd's
 import type { $Fetch, FetchOptions, FetchContext } from "ofetch"
+import ApiException from "~/exceptions/ApiException"
 
 /*
  The FetchFactory acts as a wrapper around an HTTP client. 
@@ -41,11 +42,18 @@ class FetchFactory<T> {
 
                 options.headers = headers
             },
-            async onResponseError({ response }: FetchContext) {
+            async onResponseError({ response, error, request }: FetchContext) {
                 /* Remove Token on Error Code 401 */
                 if (response && response.status == 401) {
                     jwt.value = null
                 }
+
+                throw new ApiException({
+                    message: "Api Error",
+                    response: response,
+                    status_code: response?.status,
+                    error: error,
+                })
             },
         })
     }

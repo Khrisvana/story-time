@@ -1,8 +1,8 @@
 import { string, object } from "yup"
 
 export const validationSchema = object().shape({
-    identifier: string().required("email/username is required").min(3),
-    password: string().required().min(6),
+    identifier: string().required().min(3).label('Email/Username'),
+    password: string().required().min(6).label('Password'),
 })
 
 export let fields = [

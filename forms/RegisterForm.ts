@@ -1,11 +1,11 @@
 import { string, object, ref } from "yup"
 
 export const validationSchema = object().shape({
-    name: string().required(),
-    username: string().required().min(3),
-    email: string().email().required(),
-    password: string().required().min(6),
-    password_confirmation: string().required().min(6).oneOf([ref('password')], "password don't match"),
+    name: string().required().label('Name'),
+    username: string().required().min(3).label('Username'),
+    email: string().email().required().label('Email'),
+    password: string().required().min(6).label('Password'),
+    password_confirmation: string().required().min(6).oneOf([ref('password')], "password don't match").label('Password Confirmation'),
 })
 
 export let fields = [

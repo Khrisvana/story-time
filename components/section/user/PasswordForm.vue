@@ -1,29 +1,30 @@
 <script setup lang="ts">
 import ApiException from "~/exceptions/ApiException"
-import { fields, validationSchema } from "~/forms/UserDetailForm"
+import { fields, validationSchema } from "~/forms/ChangePasswordForm"
 
 const toast = useToast()
 const { $api } = useNuxtApp()
 
-const props = defineProps<{ user: IUser | null }>()
 const userStore = useUserStore()
 
 const { handleSubmit } = useForm({
     validationSchema: validationSchema,
-    initialValues: {
-        name: props.user?.name,
-        email: props.user?.email,
-        biodata: props.user?.biodata,
-    },
+    initialValues: {},
 })
 
 const model: any | undefined = defineModel()
 const isLoading = ref(false)
 
-const submitForm = handleSubmit(async (values) => {
+const submitForm = handleSubmit(async (values: object) => {
     try {
         isLoading.value = true
-        await $api.user.updateUser(values)
+        
+        const form_values = values as IResetPassword
+
+        await $api.user.resetPassword({
+            currentPassword: form_values.old_password,
+            newPassword: form_values.password
+        })
         const { data: userData } = await $api.user.getUser()
         userStore.setUserProfile(userData.value?.data)
     } catch (error: any) {
