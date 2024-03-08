@@ -56,6 +56,16 @@ const props = withDefaults(defineProps<Props>(), {
         <slot v-if="!loading" />
         <UiButtonLoading v-else />
     </a>
+
+    <label
+        v-else-if="type == 'label'"
+        class="btn"
+        v-bind="$attrs"
+        :disabled="loading"
+    >
+        <slot v-if="!loading" />
+        <UiButtonLoading v-else />
+    </label>
 </template>
 
 <style lang="scss" scoped>

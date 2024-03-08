@@ -1,8 +1,15 @@
 <script lang="ts" setup>
-import VuePictureCropper from "vue-picture-cropper"
+import { Cropper } from "vue-advanced-cropper"
+import "vue-advanced-cropper/dist/style.css"
 
+const { $api, $bModal } = useNuxtApp()
+
+const user = useUserStore()
+
+const crp: Ref<typeof Cropper | undefined> = ref()
+const picInput = ref()
 const pic = ref()
-const result = reactive({
+const result = ref({
     dataURL: "",
     blobURL: "",
 })
@@ -13,8 +20,8 @@ const result = reactive({
 function selectFile(e: Event) {
     // Reset last selection and results
     pic.value = ""
-    result.dataURL = ""
-    result.blobURL = ""
+    result.value.dataURL = ""
+    result.value.blobURL = ""
 
     // Get selected files
     const { files } = e.target as HTMLInputElement
@@ -29,82 +36,81 @@ function selectFile(e: Event) {
         pic.value = String(reader.result)
 
         // Show the modal
-        // isShowModal.value = true
+        $bModal.show("crop-modal")
 
         // // Clear selected files of input element
-        // if (!uploadInput.value) return
-        // uploadInput.value.value = ""
+        if (!picInput.value) return
+        picInput.value.value = ""
+    }
+}
+
+async function onCrop() {
+    const payload = new FormData()
+    payload.append("refId", user.user?.id as string)
+    payload.append("ref", "plugin::users-permissions.user")
+    payload.append("field", "profile_picture")
+
+    const cropperResult = crp.value?.getResult()
+
+    if (cropperResult.canvas) {
+        cropperResult.canvas.toBlob(async (blob: Blob) => {
+            const file = new File([blob], "avatar_", { type: "image/jpeg" })
+            payload.append("files", file)
+
+            if (user.user?.profile_picture?.id) {
+                await $api.user.deleteProfilePicture(
+                    user.user?.profile_picture.id,
+                )
+            }
+            await $api.user.uploadProfile(payload)
+            const { data: userData } = await $api.user.getUser()
+            user.setUserProfile(userData.value?.data)
+
+            $bModal.hide("crop-modal")
+        }, "image/jpeg")
     }
 }
 </script>
 
 <template>
-    <div class="w-100">
-        <UiButton
-            class="profile__img-upload btn-outline-primary fw-semibold"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
-            >Change Avatar</UiButton
-        >
-        <input
-            type="file"
-            name="profile_picture"
-            id="id-profile_picture"
-            class="d-none"
-        />
-    </div>
-    <div
-        class="modal fade"
-        id="exampleModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">
-                        Adjust Image
-                    </h1>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <ClientOnly>
-                        <VuePictureCropper
-                            :boxStyle="{
-                                width: '100%',
-                                height: '100%',
-                                backgroundColor: '#f8f8f8',
-                                margin: 'auto',
-                            }"
-                            :img="'https://dummyimage.com/200x200/ebebeb'"
-                            :options="{
-                                viewMode: 1,
-                                dragMode: 'crop',
-                                aspectRatio: 1 / 1,
-                            }"
-                        />
-                    </ClientOnly>
-                </div>
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                    >
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary">
-                        Save changes
-                    </button>
-                </div>
-            </div>
+    <div>
+        <div class="w-100">
+            <UiButton
+                type="label"
+                for="id-profile_picture"
+                class="profile__img-upload btn-outline-primary fw-semibold"
+                >Change Avatar</UiButton
+            >
+            <input
+                ref="picInput"
+                type="file"
+                name="profile_picture"
+                id="id-profile_picture"
+                class="d-none form-control"
+                accept="image/*"
+                @input="selectFile"
+            />
         </div>
+        <UiModal id="crop-modal" title="Adjust Image">
+            <ClientOnly>
+                <Cropper
+                    ref="crp"
+                    class="cropper"
+                    :src="pic"
+                    :stencil-props="{
+                        aspectRatio: 1,
+                    }"
+                />
+            </ClientOnly>
+            <template #footer>
+                <UiButton
+                    class="btn-outline-primary me-2"
+                    @click="$bModal.hide('crop-modal')"
+                    >Close</UiButton
+                >
+                <UiButton class="btn-primary" @click="onCrop">Save</UiButton>
+            </template>
+        </UiModal>
     </div>
 </template>
 

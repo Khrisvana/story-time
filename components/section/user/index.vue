@@ -44,22 +44,24 @@ const profilePicture = computed(() => {
                             alt="profile picture"
                         />
                     </div>
-                    <SectionUserAvatar/>
+                    <SectionUserAvatar />
                 </div>
                 <div class="col-lg-8 col-12">
                     <table class="profile__detail" v-if="!display.edit_user">
-                        <tr>
-                            <th>Name</th>
-                            <td>{{ store.user?.name }}</td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>{{ store.user?.email }}</td>
-                        </tr>
-                        <tr>
-                            <th>Biodata</th>
-                            <td>{{ store.user?.biodata }}</td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ store.user?.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ store.user?.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Biodata</th>
+                                <td>{{ store.user?.biodata }}</td>
+                            </tr>
+                        </tbody>
                     </table>
                     <SectionUserForm
                         v-else

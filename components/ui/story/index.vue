@@ -50,6 +50,7 @@ const createdAt = computed(() => {
                 <span class="badge text-bg-light">{{ story.category.name }}</span>
             </div>
 
+
             <UiStoryBookmark />
         </div>
     </NuxtLink>

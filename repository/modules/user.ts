@@ -42,6 +42,26 @@ class UserModule extends FetchFactory<any> {
             opt,
         )
     }
+
+    async uploadProfile(payload: object | FormData, opt?: FetchOptions<"json">) {
+        const url = `/upload`
+        return await this.call(
+            "POST",
+            url,
+            payload, // body
+            opt,
+        )
+    }
+
+    async deleteProfilePicture(profile_pic_id: string, opt?: FetchOptions<"json">) {
+        const url = `/upload/files/${profile_pic_id}`
+        return await this.call(
+            "DELETE",
+            url,
+            undefined, // body
+            opt,
+        )
+    }
 }
 
 export default UserModule

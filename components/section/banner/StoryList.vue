@@ -2,11 +2,11 @@
 const { $api } = useNuxtApp()
 
 const queryParams = ref({
-    keyword: null,
+    keyword: undefined,
     sort: "",
-    author: null,
+    author: undefined,
     page: 1,
-    category: null,
+    category: undefined,
 })
 
 const list: Ref<Array<IStory>> = ref([])
