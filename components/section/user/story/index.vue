@@ -5,7 +5,7 @@ const { $api } = useNuxtApp()
 const queryParams = ref({
     keyword: undefined,
     sort: "",
-    // author: user.user?.id,
+    author: user.user?.id,
     page: 1,
     category: undefined,
 })
@@ -17,6 +17,17 @@ const list: Ref<Array<IStory>> = ref([])
 const { data } = await $api.stories.getStories({ params: queryParams.value })
 list.value = data.value.data
 pagination.value = data.value.meta.pagination
+
+const formatTime = (value: string) => {
+    const date = new Date(value)
+
+    const time = date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hourCycle: 'h23' })
+    const day = date.toLocaleDateString("en-US", { day: "2-digit" })
+    const month = date.toLocaleDateString("en-US", { month: "short" })
+    const year = date.toLocaleDateString("en-US", { year: "numeric" })
+
+    return `${time}, ${day} ${month} ${year}`
+}
 </script>
 
 <template>
@@ -24,7 +35,10 @@ pagination.value = data.value.meta.pagination
         <div class="d-flex justify-content-between">
             <h3>Story List</h3>
             <div>
-                <UiButton type="button" class="btn-primary fw-semibold"
+                <UiButton
+                    type="nuxt-link"
+                    link="/user/story/create"
+                    class="btn-primary btn-center fw-semibold"
                     ><Icon name="ic:outline-add" class="me-2" />
                     Create</UiButton
                 >
@@ -42,12 +56,19 @@ pagination.value = data.value.meta.pagination
             <tbody>
                 <tr v-for="(story, index) in list" :key="story.id">
                     <th scope="row">{{ story.title }}</th>
-                    <td>{{ story.updatedAt }}</td>
-                    <td>params.action</td>
+                    <td>{{ formatTime(story.updatedAt) }}</td>
+                    <td>
+                        <UiButton type="nuxt-link" :to="`/user/story/${story.id}/edit`" class="btn-outline-primary fw-semibold me-2"
+                            >Edit</UiButton
+                        >
+                        <UiButton class="btn-outline-danger fw-semibold">Delete</UiButton>
+                    </td>
                 </tr>
             </tbody>
         </table>
 
-        <UiPagination :pagination="pagination" />
+        <div class="d-flex justify-content-end mt-3">
+            <UiPagination :pagination="pagination" />
+        </div>
     </div>
 </template>

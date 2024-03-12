@@ -27,9 +27,9 @@ declare global {
     }
 
     interface IResetPassword {
-        old_password: string,
-        password: string,
-        password_confirmation:string 
+        old_password: string
+        password: string
+        password_confirmation: string
     }
 
     interface IPagination {
@@ -46,6 +46,7 @@ declare global {
         type: string
         placeholder: string
         disabled?: boolean
+        options?: { value: string; name: string, disabled?: boolean }[] | undefined
     }
 
     interface IDynamicInputSchema {

@@ -18,6 +18,11 @@ $theme-colors: map-merge($theme-colors, (
   "white": $white,
 ));
 
+$pagination-color: $primary;
+$pagination-hover-color: $primary;
+$pagination-active-bg: $primary;
+$pagination-active-border-color: $primary;
+
 @import "bootstrap/scss/bootstrap";
 
 a {
@@ -68,5 +73,12 @@ select {
   & .content {
     padding-top: $default-content-padding-top;
     min-height: calc(100vh - $default-content-margin-top);
+  }
+}
+
+.quill-wrapper {
+  &.invalid {
+    border: 1px solid;
+    border-color: $danger;
   }
 }

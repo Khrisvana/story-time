@@ -2,7 +2,6 @@
 import ApiException from "~/exceptions/ApiException"
 import { fields, validationSchema } from "~/forms/LoginForm"
 
-const jwt = useCookie("jwt")
 const { $api } = useNuxtApp()
 const userStore = useUserStore()
 const toast = useToast()

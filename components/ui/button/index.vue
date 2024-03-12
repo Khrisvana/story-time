@@ -73,7 +73,11 @@ const props = withDefaults(defineProps<Props>(), {
     border-radius: 0;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+}
+
+.btn-center {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 </style>

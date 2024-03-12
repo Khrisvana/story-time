@@ -11,8 +11,8 @@ const storyThumbnail = computed(() => {
     const story: any = props.story ?? {}
 
     return {
-        img: config.public.baseURL + story.cover_image.formats.thumbnail.url,
-        alt: story.cover_image.formats.thumbnail.name,
+        img: config.public.baseURL + story.cover_image?.formats.thumbnail.url,
+        alt: story.cover_image?.formats.thumbnail.name,
     }
 })
 

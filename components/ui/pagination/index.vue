@@ -44,9 +44,9 @@ const emit = defineEmits(["change"])
 
 const pageDecrease = () => {
     if (props.pagination.page > 1) {
-        props.pagination.page += 1
-    } else {
         props.pagination.page -= 1
+    } else {
+        props.pagination.page = 1
     }
 
     emit("change", props.pagination.page)
@@ -71,12 +71,12 @@ const pageIncrease = () => {
 <template>
     <nav aria-label="Page navigation example">
         <ul class="pagination">
-            <li class="page-item" @click="pageDecrease">
-                <a
-                    class="page-link"
-                    :class="{ disabled: pagination.page == 1 }"
-                    aria-label="Previous"
-                >
+            <li
+                class="page-item"
+                @click="pageDecrease"
+                :class="{ disabled: pagination.page == 1 }"
+            >
+                <a class="page-link" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
@@ -95,17 +95,25 @@ const pageIncrease = () => {
                     <a class="page-link" v-else>...</a>
                 </li>
             </template>
-            <li class="page-item" @click="pageIncrease">
-                <a
-                    class="page-link"
-                    :class="{
-                        disabled: pagination.page == pagination.pageCount,
-                    }"
-                    aria-label="Next"
-                >
+            <li
+                class="page-item"
+                @click="pageIncrease"
+                :class="{
+                    disabled: pagination.page == pagination.pageCount,
+                }"
+            >
+                <a class="page-link" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
         </ul>
     </nav>
 </template>
+
+<style lang="scss" scoped>
+.page-item {
+    &:not(.disabled) {
+        cursor: pointer;
+    }
+}
+</style>

@@ -1,12 +1,15 @@
 <script lang="ts" setup>
 import { Cropper } from "vue-advanced-cropper"
 import "vue-advanced-cropper/dist/style.css"
+import ApiException from "~/exceptions/ApiException"
 
 const { $api, $bModal } = useNuxtApp()
 
 const user = useUserStore()
 
 const crp: Ref<typeof Cropper | undefined> = ref()
+const toast = useToast()
+const isLoading = ref(false)
 const picInput = ref()
 const pic = ref()
 const result = ref({
@@ -19,6 +22,8 @@ const result = ref({
  */
 function selectFile(e: Event) {
     // Reset last selection and results
+    let allowedExtension = ["image/jpeg", "image/jpg", "image/png"]
+
     pic.value = ""
     result.value.dataURL = ""
     result.value.blobURL = ""
@@ -29,6 +34,15 @@ function selectFile(e: Event) {
 
     // Convert to dataURL and pass to the cropper component
     const file = files[0]
+
+    if (!allowedExtension.includes(file.type)) {
+        return toast.error("Accepted image format is only .png .jpg and .jpeg")
+    }
+
+    if (file.size / 1_000_000 > 2) {
+        return toast.error("Maximum file size is 2MB")
+    }
+
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => {
@@ -54,19 +68,27 @@ async function onCrop() {
 
     if (cropperResult.canvas) {
         cropperResult.canvas.toBlob(async (blob: Blob) => {
-            const file = new File([blob], "avatar_", { type: "image/jpeg" })
-            payload.append("files", file)
+            try {
+                const file = new File([blob], "avatar_", { type: "image/jpeg" })
+                payload.append("files", file)
 
-            if (user.user?.profile_picture?.id) {
-                await $api.user.deleteProfilePicture(
-                    user.user?.profile_picture.id,
-                )
+                if (user.user?.profile_picture?.id) {
+                    await $api.user.deleteProfilePicture(
+                        user.user?.profile_picture.id,
+                    )
+                }
+                await $api.user.uploadProfile(payload)
+                const { data: userData } = await $api.user.getUser()
+                user.setUserProfile(userData.value?.data)
+
+                $bModal.hide("crop-modal")
+            } catch (error) {
+                if (error instanceof ApiException) {
+                    toast.error(error.data().error.message)
+                } else {
+                    console.log(error)
+                }
             }
-            await $api.user.uploadProfile(payload)
-            const { data: userData } = await $api.user.getUser()
-            user.setUserProfile(userData.value?.data)
-
-            $bModal.hide("crop-modal")
         }, "image/jpeg")
     }
 }
@@ -87,7 +109,7 @@ async function onCrop() {
                 name="profile_picture"
                 id="id-profile_picture"
                 class="d-none form-control"
-                accept="image/*"
+                accept="image/jpeg,image/jpg,image/png"
                 @input="selectFile"
             />
         </div>
@@ -108,7 +130,12 @@ async function onCrop() {
                     @click="$bModal.hide('crop-modal')"
                     >Close</UiButton
                 >
-                <UiButton class="btn-primary" @click="onCrop">Save</UiButton>
+                <UiButton
+                    class="btn-primary"
+                    @click="onCrop"
+                    :loading="isLoading"
+                    >Save</UiButton
+                >
             </template>
         </UiModal>
     </div>
