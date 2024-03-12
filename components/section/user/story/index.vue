@@ -1,6 +1,9 @@
 <script lang="ts" setup>
+import ApiException from "~/exceptions/ApiException"
+
 const user = useUserStore()
-const { $api } = useNuxtApp()
+const { $api, $bModal } = useNuxtApp()
+const toast = useToast()
 
 const queryParams = ref({
     keyword: undefined,
@@ -10,23 +13,59 @@ const queryParams = ref({
     category: undefined,
 })
 
+const isLoading = ref(false)
+const deleteId: Ref<string | number | string[]> = ref("")
 const pagination: Ref<IPagination> = ref({} as IPagination)
 
 const list: Ref<Array<IStory>> = ref([])
 
-const { data } = await $api.stories.getStories({ params: queryParams.value })
-list.value = data.value.data
-pagination.value = data.value.meta.pagination
+const fetchStories = async () => {
+    const { data } = await $api.stories.getStories({
+        params: queryParams.value,
+    })
+    list.value = data.value.data
+    pagination.value = data.value.meta.pagination
+}
+
+fetchStories()
 
 const formatTime = (value: string) => {
     const date = new Date(value)
 
-    const time = date.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hourCycle: 'h23' })
+    const time = date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hourCycle: "h23",
+    })
     const day = date.toLocaleDateString("en-US", { day: "2-digit" })
     const month = date.toLocaleDateString("en-US", { month: "short" })
     const year = date.toLocaleDateString("en-US", { year: "numeric" })
 
     return `${time}, ${day} ${month} ${year}`
+}
+
+const openModal = (id: string | number | string[]) => {
+    deleteId.value = id
+    $bModal.show("delete-modal")
+}
+
+const onDelete = async () => {
+    try {
+        isLoading.value = true
+        await $api.stories.deleteStory(deleteId.value)
+        toast.success("Successfully delete story")
+        await fetchStories()
+        $bModal.hide("delete-modal")
+
+    } catch (error) {
+        if (error instanceof ApiException) {
+            toast.error(error.data().error.message)
+        } else {
+            console.log(error)
+        }
+    } finally {
+        isLoading.value = false
+    }
 }
 </script>
 
@@ -55,13 +94,35 @@ const formatTime = (value: string) => {
             </thead>
             <tbody>
                 <tr v-for="(story, index) in list" :key="story.id">
-                    <th scope="row">{{ story.title }}</th>
+                    <th scope="row">
+                        <NuxtLink
+                            :to="`/story/${story.id}`"
+                            class="text-primary link-hover"
+                            >{{ story.title }}</NuxtLink
+                        >
+                    </th>
                     <td>{{ formatTime(story.updatedAt) }}</td>
                     <td>
-                        <UiButton type="nuxt-link" :to="`/user/story/${story.id}/edit`" class="btn-outline-primary fw-semibold me-2"
-                            >Edit</UiButton
-                        >
-                        <UiButton class="btn-outline-danger fw-semibold">Delete</UiButton>
+                        <div class="d-flex">
+                            <UiButton
+                                type="nuxt-link"
+                                :to="`/user/story/${story.id}/edit`"
+                                class="btn-outline-primary fw-semibold me-2 btn-center"
+                                ><Icon
+                                    name="material-symbols:edit"
+                                    class="me-1"
+                                />
+                                Edit</UiButton
+                            >
+                            <UiButton
+                                @click="openModal(story.id)"
+                                class="btn-outline-danger fw-semibold btn-center"
+                                ><Icon
+                                    name="material-symbols:delete-rounded"
+                                    class="me-1"
+                                />Delete</UiButton
+                            >
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -71,4 +132,18 @@ const formatTime = (value: string) => {
             <UiPagination :pagination="pagination" />
         </div>
     </div>
+
+    <UiModal id="delete-modal" title="Delete Story">
+        <p class="mb-0">Are you sure want to delete this story?</p>
+        <template #footer>
+            <UiButton
+                class="btn-outline-primary me-2"
+                @click="$bModal.hide('delete-modal')"
+                >Close</UiButton
+            >
+            <UiButton class="btn-primary" @click="onDelete" :loading="isLoading"
+                >Delete</UiButton
+            >
+        </template>
+    </UiModal>
 </template>

@@ -77,6 +77,16 @@ class StoryModule extends FetchFactory<any> {
         )
     }
 
+    async deleteStory(id: string | string[] | number, opt?: FetchOptions<"json">) {
+        const url = `${this.RESOURCE}/${id}`
+        return await this.call(
+            "DELETE",
+            url,
+            undefined, // body
+            opt,
+        )
+    }
+
     async uploadStoryImage(payload: object | FormData, opt?: FetchOptions<"json">) {
         const url = `${this.UPLOAD}`
         return await this.call(
