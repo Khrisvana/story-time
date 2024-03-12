@@ -19,17 +19,21 @@ const storyThumbnail = computed(() => {
 const createdAt = computed(() => {
     const date = new Date(props.story.createdAt)
 
-    const day = date.toLocaleDateString('en-US', { day: '2-digit'})
-    const month = date.toLocaleDateString('en-US', { month: 'short'})
-    const year = date.toLocaleDateString('en-US', { year: '2-digit'})
+    const day = date.toLocaleDateString("en-US", { day: "2-digit" })
+    const month = date.toLocaleDateString("en-US", { month: "short" })
+    const year = date.toLocaleDateString("en-US", { year: "2-digit" })
 
     return `${day} ${month} ${year}`
 })
 </script>
 
 <template>
-    <NuxtLink class="story" :="$attrs" :to="`/story/${story.id}`">
-        <div class="card h-100 rounded-0 border-0">
+    <div class="story">
+        <NuxtLink
+            :="$attrs"
+            :to="`/story/${story.id}`"
+            class="card w-100 h-100 rounded-0 border-0"
+        >
             <img
                 :src="storyThumbnail.img"
                 class="story__image"
@@ -44,16 +48,20 @@ const createdAt = computed(() => {
                 </p>
 
                 <div class="story__author">
-                    <p><small>by {{ story.author.username }}</small></p>
-                    <p><small>{{ createdAt }}</small></p>
+                    <p>
+                        <small>by {{ story.author.username }}</small>
+                    </p>
+                    <p>
+                        <small>{{ createdAt }}</small>
+                    </p>
                 </div>
-                <span class="badge text-bg-light">{{ story.category.name }}</span>
+                <span class="badge text-bg-light">{{
+                    story.category.name
+                }}</span>
             </div>
-
-
-            <UiStoryBookmark />
-        </div>
-    </NuxtLink>
+        </NuxtLink>
+        <UiStoryBookmark/>
+    </div>
 </template>
 
 <style lang="scss" scoped>
@@ -75,6 +83,7 @@ const createdAt = computed(() => {
 
     &__bookmark {
         display: none;
+        right: 1rem!important;
     }
 
     &__image {

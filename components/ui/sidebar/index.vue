@@ -1,5 +1,11 @@
 <script lang="ts" setup>
+const { $bModal } = useNuxtApp()
 const userStore = useUserStore()
+
+const logoutUser = () => {
+    $bModal.hide('logout-modal')
+    userStore.logout()
+}
 </script>
 
 <template>
@@ -34,7 +40,7 @@ const userStore = useUserStore()
         >
         <div class="w-100 px-2 py-2">
             <UiButton
-                @click="userStore.logout"
+                @click="$bModal.show('logout-modal')"
                 type="button"
                 class="sidebar__btn btn-outline-danger fw-semibold d-flex justify-content-between"
                 ><span>Logout</span>
@@ -42,6 +48,22 @@ const userStore = useUserStore()
             /></UiButton>
         </div>
     </aside>
+
+    <UiModal id="logout-modal" title="Logout">
+        <p class="mb-0">Are you sure want to logout?</p>
+        <template #footer>
+            <UiButton
+                class="rounded-0 fw-semibold px-3 btn-outline-primary me-2"
+                @click="$bModal.hide('logout-modal')"
+                >Cancel</UiButton
+            >
+            <UiButton
+                class="rounded-0 fw-semibold px-3 btn-primary"
+                @click="logoutUser"
+                >Logout</UiButton
+            >
+        </template>
+    </UiModal>
 </template>
 
 <style lang="scss" scoped>

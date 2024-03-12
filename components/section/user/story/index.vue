@@ -137,11 +137,11 @@ const onDelete = async () => {
         <p class="mb-0">Are you sure want to delete this story?</p>
         <template #footer>
             <UiButton
-                class="btn-outline-primary me-2"
+                class="fw-semibold btn-outline-primary me-2"
                 @click="$bModal.hide('delete-modal')"
-                >Close</UiButton
+                >Cancel</UiButton
             >
-            <UiButton class="btn-primary" @click="onDelete" :loading="isLoading"
+            <UiButton class="fw-semibold btn-primary" @click="onDelete" :loading="isLoading"
                 >Delete</UiButton
             >
         </template>
