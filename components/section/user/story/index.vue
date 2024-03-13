@@ -128,7 +128,7 @@ const onDelete = async () => {
             </tbody>
         </table>
 
-        <div class="d-flex justify-content-end mt-3">
+        <div class="d-flex justify-content-end mt-3" v-if="pagination.pageCount > 1">
             <UiPagination :pagination="pagination" v-model="pagination.page"/>
         </div>
     </div>
