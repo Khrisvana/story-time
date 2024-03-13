@@ -6,4 +6,5 @@ definePageMeta({
 </script>
 
 <template>
+    <SectionUserBookmark/>
 </template>

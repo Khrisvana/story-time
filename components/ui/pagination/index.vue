@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 const props = defineProps<{ pagination: IPagination }>()
 
+const model: Ref<number> = defineModel({ default: 1 })
+
 const pages = computed(() => {
     const pagination = props.pagination
 
@@ -43,28 +45,28 @@ const pages = computed(() => {
 const emit = defineEmits(["change"])
 
 const pageDecrease = () => {
-    if (props.pagination.page > 1) {
-        props.pagination.page -= 1
+    if (model.value > 1) {
+        model.value -= 1
     } else {
-        props.pagination.page = 1
+        model.value = 1
     }
 
-    emit("change", props.pagination.page)
+    emit("change", model.value)
 }
 
 const pageChange = (value: number) => {
-    props.pagination.page = value
-    emit("change", props.pagination.page)
+    model.value = value
+    emit("change", model.value)
 }
 
 const pageIncrease = () => {
-    if (props.pagination.page < props.pagination.pageCount) {
-        props.pagination.page += 1
+    if (model.value < props.pagination.pageCount) {
+        model.value += 1
     } else {
-        props.pagination.page = props.pagination.pageCount
+        model.value = props.pagination.pageCount
     }
 
-    emit("change", props.pagination.page)
+    emit("change", model.value)
 }
 </script>
 

@@ -129,7 +129,7 @@ const onDelete = async () => {
         </table>
 
         <div class="d-flex justify-content-end mt-3">
-            <UiPagination :pagination="pagination" />
+            <UiPagination :pagination="pagination" v-model="pagination.page"/>
         </div>
     </div>
 

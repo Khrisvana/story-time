@@ -3,7 +3,7 @@ const { $bModal } = useNuxtApp()
 const userStore = useUserStore()
 
 const logoutUser = () => {
-    $bModal.hide('logout-modal')
+    $bModal.hide("logout-modal")
     userStore.logout()
 }
 </script>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { $api } = useNuxtApp()
 
+const bookmark = useBookmarkStore()
 const queryParams = ref({
     keyword: undefined,
     sort: "",
@@ -35,6 +36,10 @@ const fetchStories = async (loadMore: boolean = false) => {
 }
 
 await fetchStories()
+
+onMounted(() => {
+    bookmark.initBookmark()
+})
 </script>
 
 <template>

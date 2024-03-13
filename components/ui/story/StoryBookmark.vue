@@ -1,8 +1,20 @@
+<script lang="ts" setup>
+interface Prop {
+    is_active?: boolean
+}
+
+const props = defineProps<Prop>()
+</script>
+
 <template>
-    <button class="btn story__bookmark shadow" :class="$attrs">
-        <Icon
-            name="material-symbols-light:bookmark-add-outline"
-        />
+    <button class="btn story__bookmark shadow" :="$attrs">
+        <ClientOnly>
+            <Icon
+                v-show="!is_active"
+                name="material-symbols-light:bookmark-add-outline"
+            />
+            <Icon v-show="is_active" name="material-symbols:bookmark" />
+        </ClientOnly>
     </button>
 </template>
 
@@ -20,6 +32,6 @@
     background-color: white !important;
     font-size: 20px;
     border: none;
-    border-radius: 100%!important;
+    border-radius: 100% !important;
 }
 </style>

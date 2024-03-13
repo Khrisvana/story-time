@@ -1,8 +1,9 @@
 <script setup lang="ts">
 type Props = {
-    story: IStory
+    story: IStory | Omit<IStory, "content">
 }
 
+const bookmark = useBookmarkStore()
 const props = defineProps<Props>()
 
 const config = useRuntimeConfig()
@@ -25,6 +26,19 @@ const createdAt = computed(() => {
 
     return `${day} ${month} ${year}`
 })
+
+const isBookmarked = computed(() => {
+    let index = bookmark.bookmarkIds.indexOf(props.story.id)
+    if (index <= -1) return false
+    return true
+})
+
+const toggleBookmark = () => {
+    if (!isBookmarked.value) {
+        return bookmark.setBookmark(props.story)
+    }
+    return bookmark.removeBookmark(props.story)
+}
 </script>
 
 <template>
@@ -43,8 +57,11 @@ const createdAt = computed(() => {
                 <h5 class="card-title story__title">
                     {{ story.title }}
                 </h5>
-                <p class="card-text story__text">
-                    {{ story.content }}
+                <p
+                    class="card-text story__text"
+                    v-if="(story as IStory).content"
+                >
+                    {{ (story as IStory).content }}
                 </p>
 
                 <div class="story__author">
@@ -60,7 +77,7 @@ const createdAt = computed(() => {
                 }}</span>
             </div>
         </NuxtLink>
-        <UiStoryBookmark/>
+        <UiStoryBookmark @click="toggleBookmark" :is_active="isBookmarked" />
     </div>
 </template>
 
@@ -83,7 +100,7 @@ const createdAt = computed(() => {
 
     &__bookmark {
         display: none;
-        right: 1rem!important;
+        right: 1rem !important;
     }
 
     &__image {
