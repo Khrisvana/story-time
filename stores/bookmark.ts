@@ -26,9 +26,10 @@ export const useBookmarkStore = defineStore({
                 this.bookmarks = JSON.parse(storageValue)
             }
         },
-        setBookmark(item: IStory | Omit<IStory, "content">) {
-
+        async setBookmark(item: IStory | Omit<IStory, "content">) {
+            const userStore = useUserStore()
             if (process.server) return undefined
+            if (!userStore.user) return await navigateTo("/login")
             let formattedItem = formatItem(item)
 
             this.bookmarks.push(formattedItem)
@@ -44,8 +45,10 @@ export const useBookmarkStore = defineStore({
 
             return toast.success("Successfully add story from bookmark")
         },
-        removeBookmark(item: IStory | Omit<IStory, "content">) {
+        async removeBookmark(item: IStory | Omit<IStory, "content">) {
+            const userStore = useUserStore()
             if (process.server) return undefined
+            if (!userStore.user) return await navigateTo("/login")
             let formattedItem = formatItem(item)
 
             let exist = this.bookmarks

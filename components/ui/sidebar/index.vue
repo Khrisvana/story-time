@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 const { $bModal } = useNuxtApp()
 const userStore = useUserStore()
+const bookmark = useBookmarkStore()
 
 const logoutUser = () => {
     $bModal.hide("logout-modal")
     userStore.logout()
+    bookmark.clearBookmark()
 }
 </script>
 
