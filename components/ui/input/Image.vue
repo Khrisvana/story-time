@@ -66,12 +66,12 @@ function getImage(file: string | File) {
     <p v-if="label" class="form-label">{{ label }}</p>
     <div class="image-input">
         <Field v-model="model" :name v-slot="{ errors, field }" v-bind="$attrs">
-            <label :for="id" class="image-input--label" v-show="!displayImage && !field.value" :class="{'invalid': errors.length > 0}">
+            <label :for="id" class="image-input__label" v-show="!displayImage && !field.value" :class="{'invalid': errors.length > 0}">
                 <Icon name="material-symbols:add-circle-rounded" class="fs-5" />
                 Add Image
             </label>
-            <div class="image-input--preview" v-show="displayImage || field.value">
-                <img :src="getImage(field.value)" alt="preview" ref="picPreview" class="w-100 h-100 image-input--preview-image" />
+            <div class="image-input__preview" v-show="displayImage || field.value">
+                <img :src="getImage(field.value)" alt="preview" ref="picPreview" class="w-100 h-100 image-input__preview-image" />
             </div>
             <input
                 ref="picInput"
@@ -86,7 +86,7 @@ function getImage(file: string | File) {
             <div
                 v-if="displayImage || field.value"
                 @click="removeImage"
-                class="d-flex align-items-center justify-content-center image-input--remove"
+                class="d-flex align-items-center justify-content-center image-input__remove"
             >
                 <Icon name="ic:baseline-close" />
             </div>
@@ -100,10 +100,11 @@ function getImage(file: string | File) {
 .image-input {
     position: relative;
     width: 300px;
-    height: 300px;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
 
-    &--label,
-    &--preview {
+    &__label,
+    &__preview {
         display: flex;
         width: 100%;
         height: 100%;
@@ -112,36 +113,36 @@ function getImage(file: string | File) {
         flex-direction: column;
     }
 
-    &--label {
+    &__label {
         cursor: pointer;
         border-width: 2px;
         border-style: dashed;
-        border-color: v.$secondary;
+        border-color: $secondary;
 
         &.invalid {
-            border-color: v.$danger;
+            border-color: $danger;
         }
     }
 
-    &--preview {
+    &__preview {
         &-image {
             object-fit: contain;
         }
     }
 
-    &--remove {
+    &__remove {
         cursor: pointer;
         color: white;
         position: absolute;
         top: 0;
         left: 100%;
-        background: v.$danger;
+        background: $danger;
         border-radius: 100%;
         padding: 0.25rem;
         transform: translate(-50%, -50%);
 
         &:hover {
-            background: darken(v.$danger, 10%);
+            background: darken($danger, 10%);
         }
     }
 }

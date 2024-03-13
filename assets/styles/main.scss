@@ -1,36 +1,12 @@
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
-
-$primary: #343434;
-$secondary: #8f8f8f;
-$light: #eee;
-$white: #fff;
-
-$default-content-margin-top: 74px;
-$default-content-padding-top: 22px;
-$default-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
-
-$theme-colors: map-merge($theme-colors, (
-  "primary": $primary,
-  "secondary": $secondary,
-  "light": $light,
-  "white": $white,
-));
-
-$pagination-color: $primary;
-$pagination-hover-color: $primary;
-$pagination-active-bg: $primary;
-$pagination-active-border-color: $primary;
-
-@import "bootstrap/scss/bootstrap";
+@use 'config/bootstrap.scss' as v;
+@import 'config/theme.scss';
 
 a {
   text-decoration: none;
 }
 
 .link-hover:hover {
-  text-decoration: underline!important;
+  text-decoration: underline;
 }
 
 .input-group {
@@ -40,15 +16,15 @@ a {
 }
 
 .form-control {
-  border-radius: 0!important;
+  border-radius: 0;
   
   &:hover, &:focus {
-    box-shadow: none!important;
-    border-color: $primary!important;
+    box-shadow: none;
+    border-color: v.$primary;
   }
 
   &.is-invalid {
-    border-color: $danger!important;
+    border-color: v.$danger;
   }
 }
 
@@ -67,22 +43,40 @@ select {
 
 .card {
   border-radius: 0;
-  box-shadow: $default-box-shadow;
+  box-shadow: v.$default-box-shadow;
   border: none;
+
+  &-header {
+    border: none;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+
+    @include media-breakpoint-down(sm) {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
 }
 
 .main-wrapper {
-  margin-top: $default-content-margin-top;
+  margin-top: v.$default-content-margin-top;
 
   & .content {
-    padding-top: $default-content-padding-top;
-    min-height: calc(100vh - $default-content-margin-top);
+    padding-top: v.$default-content-padding-top;
+    min-height: calc(100vh - v.$default-content-margin-top);
   }
 }
 
 .quill-wrapper {
   &.invalid {
     border: 1px solid;
-    border-color: $danger;
+    border-color: v.$danger;
   }
 }

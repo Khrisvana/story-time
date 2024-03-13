@@ -29,14 +29,14 @@ const data = computed(() => {
     <div class="row">
         <UiStory
             v-if="data.length > 0"
-            class="col-6 col-lg-4"
+            class="col-12 col-md-6 col-lg-3"
             v-for="item in data"
             :key="item.id"
             :story="item"
         />
         <UiDataNotFound v-else />
     </div>
-    <div class="d-flex justify-content-end mt-4" v-if="data.length > 0">
+    <div class="d-flex justify-content-end mt-4" v-if="pagination.pageCount > 1">
         <UiPagination :pagination="pagination" v-model="paginationBase.page" />
     </div>
 </template>

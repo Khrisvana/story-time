@@ -83,7 +83,7 @@ onMounted(() => {
         <div class="row">
             <UiStory
                 v-if="list.length > 0"
-                class="col-6 col-lg-3"
+                class="col-12 col-md-6 col-lg-3"
                 v-for="item in list"
                 :key="item.id"
                 :story="item"

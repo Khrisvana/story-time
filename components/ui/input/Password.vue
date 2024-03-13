@@ -58,7 +58,7 @@ const toggleShowPassword = () => {
     &__input:hover,
     &__input:focus {
         & ~ #{$p}__toggle {
-            border-color: v.$primary !important;
+            border-color: $primary !important;
         }
     }
 
@@ -70,7 +70,7 @@ const toggleShowPassword = () => {
         padding-right: 1rem;
 
         #{$p}__input.is-invalid ~ & {
-            border-color: v.$danger !important;
+            border-color: $danger !important;
         }
     }
 }

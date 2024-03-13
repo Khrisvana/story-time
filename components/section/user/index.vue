@@ -15,51 +15,62 @@ const profilePicture = computed(() => {
 
 <template>
     <div class="card mb-4 profile">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-                <h3 class="mb-0">My Profile</h3>
-                <div>
-                    <UiButton
-                        type="button"
-                        class="btn-outline-primary d-flex align-items-center"
-                        v-if="!displayEdit"
-                        @click="displayEdit = true"
-                        ><Icon
-                            name="material-symbols:edit-square-outline"
-                            class="me-2"
-                        />Edit Profile</UiButton
-                    >
-                </div>
+        <div class="card-header">
+            <h3 class="mb-3 mb-md-0 card-header__title">My Profile</h3>
+            <div>
+                <UiButton
+                    type="button"
+                    class="btn-outline-primary card-header__button"
+                    v-if="!displayEdit"
+                    @click="displayEdit = true"
+                    ><Icon
+                        name="material-symbols:edit-square-outline"
+                        class="me-2"
+                    />Edit Profile</UiButton
+                >
             </div>
-
+        </div>
+        <div class="card-body">
             <div class="row mt-3">
-                <div class="col-lg-4 col-12">
-                    <div class="w-100 mb-3">
-                        <img
-                            class="profile__img rounded-circle"
-                            :src="profilePicture"
-                            alt="profile picture"
-                        />
-                    </div>
+                <div
+                    class="col-lg-4 col-md-6 col-12 mb-3 mb-md-0 profile__avatar"
+                >
+                    <img
+                        class="profile__avatar-img rounded-circle mb-3"
+                        :src="profilePicture"
+                        alt="profile picture"
+                    />
                     <SectionUserAvatar />
                 </div>
-                <div class="col-lg-8 col-12">
-                    <table class="profile__detail" v-if="!displayEdit">
-                        <tbody>
-                            <tr>
-                                <th>Name</th>
-                                <td>{{ store.user?.name }}</td>
-                            </tr>
-                            <tr>
-                                <th>Email</th>
-                                <td>{{ store.user?.email }}</td>
-                            </tr>
-                            <tr>
-                                <th>Biodata</th>
-                                <td>{{ store.user?.biodata }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="col-lg-8 col-md-6 col-12">
+                    <div class="row profile__detail" v-if="!displayEdit">
+                        <div
+                            class="col-12 col-md-3 fw-bold profile__detail-title"
+                        >
+                            Name
+                        </div>
+                        <div class="col-12 col-md-9 mb-3 profile__detail-info">
+                            {{ store.user?.name }}
+                        </div>
+
+                        <div
+                            class="col-12 col-md-3 fw-bold profile__detail-title"
+                        >
+                            Email
+                        </div>
+                        <div class="col-12 col-md-9 mb-3 profile__detail-info">
+                            {{ store.user?.email }}
+                        </div>
+
+                        <div
+                            class="col-12 col-md-3 fw-bold profile__detail-title"
+                        >
+                            Biodata
+                        </div>
+                        <div class="col-12 col-md-9 mb-3 profile__detail-info">
+                            {{ store.user?.biodata }}
+                        </div>
+                    </div>
                     <SectionUserForm
                         v-else
                         v-model="displayEdit"
@@ -73,24 +84,33 @@ const profilePicture = computed(() => {
 
 <style lang="scss" scoped>
 .profile {
-    &__img {
-        width: 200px;
-        height: 200px;
-        min-width: 200px;
-        min-height: 200px;
-        max-width: 100%;
-        max-height: 100%;
+    &__avatar {
+        @include media-breakpoint-down(md) {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        &-img {
+            width: 200px;
+            height: 200px;
+            min-width: 200px;
+            min-height: 200px;
+            max-width: 100%;
+            max-height: 100%;
+        }
     }
 
     &__detail {
-        & th {
-            padding-right: 3rem;
-            font-weight: 600;
+        &-title {
+            font-weight: bold;
         }
 
-        & th,
-        & td {
-            padding-bottom: 1.5rem;
+        &-title,
+        &-info {
+            @include media-breakpoint-down(md) {
+                text-align: center;
+            }
         }
     }
 }

@@ -69,8 +69,6 @@ const logoutUser = () => {
 </template>
 
 <style lang="scss" scoped>
-@use "assets/styles/main" as v;
-
 .sidebar {
     &__btn {
         width: 100%;
@@ -82,7 +80,7 @@ const logoutUser = () => {
         align-items: center;
 
         &.btn-outline-light {
-            color: v.$secondary;
+            color: $secondary;
             &:hover,
             &:focus-visible {
                 color: black;

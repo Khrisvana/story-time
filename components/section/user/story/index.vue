@@ -56,7 +56,6 @@ const onDelete = async () => {
         toast.success("Successfully delete story")
         await fetchStories()
         $bModal.hide("delete-modal")
-
     } catch (error) {
         if (error instanceof ApiException) {
             toast.error(error.data().error.message)
@@ -84,52 +83,60 @@ const onDelete = async () => {
             </div>
         </div>
 
-        <table class="table border-top mt-4">
-            <thead>
-                <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Last Update</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(story, index) in list" :key="story.id">
-                    <th scope="row">
-                        <NuxtLink
-                            :to="`/story/${story.id}`"
-                            class="text-primary link-hover"
-                            >{{ story.title }}</NuxtLink
-                        >
-                    </th>
-                    <td>{{ formatTime(story.updatedAt) }}</td>
-                    <td>
-                        <div class="d-flex">
-                            <UiButton
-                                type="nuxt-link"
-                                :to="`/user/story/${story.id}/edit`"
-                                class="btn-outline-primary fw-semibold me-2 btn-center"
-                                ><Icon
-                                    name="material-symbols:edit"
-                                    class="me-1"
-                                />
-                                Edit</UiButton
+        <div class="table-responsive">
+            <table class="table border-top mt-4">
+                <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col" style="min-width: 150px;">Last Update</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(story, index) in list" :key="story.id" v-if="list.length > 0">
+                        <th scope="row">
+                            <NuxtLink
+                                :to="`/story/${story.id}`"
+                                class="text-primary link-hover"
+                                >{{ story.title }}</NuxtLink
                             >
-                            <UiButton
-                                @click="openModal(story.id)"
-                                class="btn-outline-danger fw-semibold btn-center"
-                                ><Icon
-                                    name="material-symbols:delete-rounded"
-                                    class="me-1"
-                                />Delete</UiButton
-                            >
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        </th>
+                        <td>{{ formatTime(story.updatedAt) }}</td>
+                        <td>
+                            <div class="d-flex">
+                                <UiButton
+                                    type="nuxt-link"
+                                    :to="`/user/story/${story.id}/edit`"
+                                    class="btn-outline-primary fw-semibold me-2 btn-center"
+                                    ><Icon
+                                        name="material-symbols:edit"
+                                        class="me-1"
+                                    />
+                                    Edit</UiButton
+                                >
+                                <UiButton
+                                    @click="openModal(story.id)"
+                                    class="btn-outline-danger fw-semibold btn-center"
+                                    ><Icon
+                                        name="material-symbols:delete-rounded"
+                                        class="me-1"
+                                    />Delete</UiButton
+                                >
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-else>
+                        <td class="text-center" colspan="3">No Data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <div class="d-flex justify-content-end mt-3" v-if="pagination.pageCount > 1">
-            <UiPagination :pagination="pagination" v-model="pagination.page"/>
+        <div
+            class="d-flex justify-content-end mt-3"
+            v-if="pagination.pageCount > 1"
+        >
+            <UiPagination :pagination="pagination" v-model="pagination.page" />
         </div>
     </div>
 
@@ -141,7 +148,10 @@ const onDelete = async () => {
                 @click="$bModal.hide('delete-modal')"
                 >Cancel</UiButton
             >
-            <UiButton class="fw-semibold btn-primary" @click="onDelete" :loading="isLoading"
+            <UiButton
+                class="fw-semibold btn-primary"
+                @click="onDelete"
+                :loading="isLoading"
                 >Delete</UiButton
             >
         </template>

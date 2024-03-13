@@ -139,7 +139,7 @@ const toggleBookmark = () => {
     &__author {
         position: sticky;
         top: calc(
-            v.$default-content-margin-top + v.$default-content-padding-top +
+            $default-content-margin-top + $default-content-padding-top +
                 1rem
         );
         display: flex;
@@ -148,13 +148,13 @@ const toggleBookmark = () => {
         flex-direction: column;
         gap: 1rem;
         padding: 1rem;
-        box-shadow: v.$default-box-shadow;
+        box-shadow: $default-box-shadow;
 
         &-title {
             margin-bottom: 0;
             font-weight: normal;
             font-size: 1rem;
-            color: v.$secondary;
+            color: $secondary;
         }
 
         &-picture {

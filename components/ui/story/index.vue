@@ -82,8 +82,6 @@ const toggleBookmark = () => {
 </template>
 
 <style lang="scss" scoped>
-@use "assets/styles/main" as v;
-
 .story {
     cursor: pointer;
     text-decoration: none;
@@ -115,7 +113,7 @@ const toggleBookmark = () => {
 
     &__text {
         margin-bottom: 0.5rem;
-        color: v.$secondary;
+        color: $secondary;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -124,7 +122,7 @@ const toggleBookmark = () => {
     }
 
     &__author {
-        color: v.$secondary;
+        color: $secondary;
 
         & p {
             margin-bottom: 0;

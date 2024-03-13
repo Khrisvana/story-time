@@ -1,0 +1,27 @@
+@import "bootstrap/scss/functions";
+
+$primary: #343434;
+$secondary: #8f8f8f;
+$light: #eee;
+$white: #fff;
+
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+
+$theme-colors: map-merge($theme-colors, (
+  "white": $white,
+));
+
+$pagination-color: $primary;
+$pagination-hover-color: $primary;
+$pagination-active-bg: $primary;
+$pagination-active-border-color: $primary;
+
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/utilities";
+
+$default-content-margin-top: 74px;
+$default-content-padding-top: 22px;
+$default-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
