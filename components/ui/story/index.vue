@@ -66,7 +66,7 @@ const toggleBookmark = () => {
 
                 <div class="story__author">
                     <p>
-                        <small>by {{ story.author.username }}</small>
+                        <small>by {{ story.author.username ?? '' }}</small>
                     </p>
                     <p>
                         <small>{{ createdAt }}</small>
