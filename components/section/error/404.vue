@@ -13,9 +13,9 @@ const error = useError()
             </template>
             <template v-else-if="error">
                 <h1>Wutdahell</h1>
-                <p>
-                    <strong>{{ error?.message }}</strong>
-                </p>
+                <pre class="w-100">
+                    {{ error }}
+                </pre>
                 <p>Sumting wen wong.</p>
                 <p>Sorry about that.</p>
             </template>

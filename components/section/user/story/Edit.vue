@@ -13,15 +13,26 @@ const categoryData = ref()
 
 const fetcher = async () => {
     try {
-        const { data, error } = await $api.stories.getStory(route.params.id)
-        if (error.value) throw error.value
+        // Get Categories
+        const category = await $api.category.getCategories()
 
-        storyData.value = data.value
+        if (category.error.value) throw category.error.value
+        categoryData.value = category.data.value
 
-        const { data: categoryRes, error: categoryError } =
-            await $api.category.getCategories()
-        if (categoryError.value) throw categoryError.value
-        categoryData.value = categoryRes.value
+        const categoryOptions = categoryData.value.data?.map(
+            (item: any, index: string | number) => {
+                return { value: item.id, name: item.name }
+            },
+        )
+
+        formFields.value = fields(categoryOptions)
+
+        // Get Story Detail
+        const story = await $api.stories.getStory(route.params.id)
+
+        if (story.error.value) throw story.error.value
+        storyData.value = story.data.value
+
     } catch (error: any) {
         if (error.cause instanceof ApiUnauthenticatedException) {
             toast.error(error.value.data().error.message)
@@ -30,28 +41,20 @@ const fetcher = async () => {
         }
     }
 }
-
 await fetcher()
-
-const categoryOptions = categoryData.value.data.map(
-    (item: any, index: string | number) => {
-        return { value: item.id, name: item.name }
-    },
-)
-formFields.value = fields(categoryOptions)
 
 const { values, handleSubmit } = useForm({
     validationSchema: validationSchema,
     initialValues: {
-        title: storyData.value?.data.title,
-        content: storyData.value?.data.content,
-        category: storyData.value?.data.category?.id,
-        cover_image: storyData.value?.data.cover_image?.url,
+        title: storyData.value?.data?.title,
+        content: storyData.value?.data?.content,
+        category: storyData.value?.data?.category?.id,
+        cover_image: storyData.value?.data?.cover_image?.url,
     },
 })
 
 const submitForm = handleSubmit(async (values) => {
-    const instance = storyData.value?.data
+    const instance = storyData.value?.data ?? null
 
     try {
         isLoading.value = true
