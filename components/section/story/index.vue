@@ -20,7 +20,7 @@ async function fetcher() {
         const { data, error } = await $api.stories.getStory(route.params.id)
 
         if (data.value?.data == null) throw new ApiNotFoundException(null)
-        if (error) throw error.value
+        if (error.value) throw error.value
         
         story.value = data.value
     } catch (error: any) {
