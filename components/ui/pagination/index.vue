@@ -45,8 +45,8 @@ const pages = computed(() => {
 const emit = defineEmits(["change"])
 
 const pageDecrease = () => {
-    if (model.value > 1) {
-        model.value -= 1
+    if (props.pagination.page > 1) {
+        model.value = props.pagination.page - 1
     } else {
         model.value = 1
     }
@@ -60,8 +60,8 @@ const pageChange = (value: number) => {
 }
 
 const pageIncrease = () => {
-    if (model.value < props.pagination.pageCount) {
-        model.value += 1
+    if (props.pagination.page < props.pagination.pageCount) {
+        model.value = props.pagination.page + 1
     } else {
         model.value = props.pagination.pageCount
     }

@@ -11,8 +11,14 @@ onMounted(() => {
 })
 
 const pagination: any = computed(() => {
+    let pageCount = Math.ceil(bookmark.bookmarks.length / 6) ?? 1
+    let currentPage = paginationBase.value.page
+
+    if (currentPage > pageCount) {
+        currentPage = pageCount
+    }
     return {
-        page: paginationBase.value.page,
+        page: currentPage,
         pageSize: paginationBase.value.pageSize,
         pageCount: Math.ceil(bookmark.bookmarks.length / 6) ?? 1,
         total: bookmark.bookmarks.length,
@@ -36,7 +42,10 @@ const data = computed(() => {
         />
         <UiDataNotFound v-else />
     </div>
-    <div class="d-flex justify-content-end mt-4" v-if="pagination.pageCount > 1">
+    <div
+        class="d-flex justify-content-end mt-4"
+        v-if="pagination.pageCount > 1"
+    >
         <UiPagination :pagination="pagination" v-model="paginationBase.page" />
     </div>
 </template>
