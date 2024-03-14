@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ApiException from "~/exceptions/ApiException"
+import ApiUnauthenticatedException from "~/exceptions/ApiUnauthenticatedException"
 import { fields, validationSchema } from "~/forms/StoryForm"
 
 const toast = useToast()
@@ -9,8 +9,21 @@ const { $api } = useNuxtApp()
 const isLoading = ref(false)
 const formFields: Ref<any> = ref([])
 
-const { data: storyData } = await $api.stories.getStory(route.params.id)
-const { data: categoryData } = await $api.category.getCategories()
+const { data: storyData, error } = await $api.stories.getStory(route.params.id)
+if (error.value instanceof ApiUnauthenticatedException) {
+    toast.error(error.value.data().error.message)
+} else {
+    console.log(error)
+}
+const { data: categoryData, error: categoryError } =
+    await $api.category.getCategories()
+
+if (categoryError.value instanceof ApiUnauthenticatedException) {
+    toast.error(categoryError.value.data().categoryError.message)
+} else {
+    console.log(error)
+}
+
 const categoryOptions = categoryData.value.data.map(
     (item: any, index: string | number) => {
         return { value: item.id, name: item.name }
@@ -30,7 +43,7 @@ const { values, handleSubmit } = useForm({
 
 const submitForm = handleSubmit(async (values) => {
     const instance = storyData.value?.data
-    
+
     try {
         isLoading.value = true
         const { data: storyData } = await $api.stories.updateStory(
@@ -58,11 +71,11 @@ const submitForm = handleSubmit(async (values) => {
             await $api.stories.uploadStoryImage(image_payload)
         }
 
-        toast.success('Successful edit story')
+        toast.success("Successful edit story")
 
         await navigateTo({ path: "/user/story" })
     } catch (error: any) {
-        if (error instanceof ApiException) {
+        if (error instanceof ApiUnauthenticatedException) {
             toast.error(error.data().error.message)
         } else {
             console.log(error)

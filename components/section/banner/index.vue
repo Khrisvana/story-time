@@ -37,10 +37,10 @@
     text-align: center;
 
     &__main {
-        font-size: pxToVw(52px, 1440px);
+        font-size: 52px;
 
         & img {
-            height: pxToVw(52px, 1440px);
+            height: 52px;
         }
 
         @include media-breakpoint-down(md) {
@@ -54,7 +54,7 @@
 
     &__subtitle {
         margin-bottom: 0;
-        font-size: pxToVw(32px, 1440px);
+        font-size: 32px;
 
         @include media-breakpoint-down(md) {
             font-size: 24px;

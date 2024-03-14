@@ -37,6 +37,7 @@ class StoryModule extends FetchFactory<any> {
                 url,
                 undefined, // body
                 opt,
+                false
             )
         }, asyncDataOptions)
     }
@@ -53,6 +54,7 @@ class StoryModule extends FetchFactory<any> {
                 url,
                 undefined, // body
                 opt,
+                false
             )
         }, asyncDataOptions)
     }

@@ -1,17 +1,17 @@
-export default class ApiException {
-    stack
+export default class ApiException extends Error {
     name
     status_code
     response
     error
 
     constructor({ message, response, status_code, error }: any) {
-        message = message ?? "-"
-        this.stack = new Error(message).stack
+        super(message);
         this.name = this.constructor.name
         this.status_code = status_code ?? response.status ?? 500
         this.response = response
         this.error = error
+
+        Error.captureStackTrace(this, this.constructor);
     }
 
     data() {

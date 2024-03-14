@@ -6,14 +6,14 @@ import type { AsyncDataOptions } from "#app"
 import FetchFactory from "../factory"
 
 type IApiResponse = {
-    data: IStory[],
+    data: IStory[]
     meta: {
         pagination: IPagination
     }
 }
 
 type IApiResponseDetail = {
-    data: IStory,
+    data: IStory
 }
 
 class CategoryModule extends FetchFactory<any> {

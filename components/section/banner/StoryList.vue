@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import ApiUnauthenticatedException from "~/exceptions/ApiUnauthenticatedException"
+
 const { $api } = useNuxtApp()
 
+const toast = useToast()
 const bookmark = useBookmarkStore()
 const queryParams = ref({
     keyword: undefined,
@@ -15,24 +18,34 @@ const pagination: Ref<IPagination | undefined> = ref()
 const pending: Ref<boolean> = ref(false)
 
 const fetchStories = async (loadMore: boolean = false) => {
-    if (loadMore) {
-        queryParams.value.page += 1
-    } else {
-        queryParams.value.page = 1
-    }
+    try {
+        if (loadMore) {
+            queryParams.value.page += 1
+        } else {
+            queryParams.value.page = 1
+        }
+        pending.value = true
+        const { data: stories, error } = await $api.stories.getStories({
+            params: queryParams.value,
+        })
 
-    pending.value = true
-    const { data: stories } = await $api.stories.getStories({
-        params: queryParams.value,
-    })
-    pending.value = false
+        if (error.value) throw error.value
 
-    pagination.value = stories.value.meta.pagination
-    if (queryParams.value.page > 1) {
-        list.value.push(...stories.value?.data)
-        return
+        pagination.value = stories.value.meta.pagination
+        if (queryParams.value.page > 1) {
+            list.value.push(...stories.value?.data)
+            return
+        }
+        list.value = stories.value?.data
+    } catch (error: any) {
+        if (error.cause instanceof ApiUnauthenticatedException) {
+            return toast.error(error.message)
+        } else {
+            return console.log(error)
+        }
+    } finally {
+        pending.value = false
     }
-    list.value = stories.value?.data
 }
 
 await fetchStories()

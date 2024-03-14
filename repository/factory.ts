@@ -1,6 +1,6 @@
 // 3rd's
 import type { $Fetch, FetchOptions, FetchContext } from "ofetch"
-import ApiException from "~/exceptions/ApiException"
+import ApiUnauthenticatedException from "~/exceptions/ApiUnauthenticatedException"
 
 /*
  The FetchFactory acts as a wrapper around an HTTP client. 
@@ -27,6 +27,7 @@ class FetchFactory<T> {
         url: string,
         data?: object,
         fetchOptions?: FetchOptions<"json">,
+        with_credential: boolean = true,
     ): Promise<T> {
         const jwt = useCookie("jwt")
         return this.$fetch<T>(url, {
@@ -35,7 +36,7 @@ class FetchFactory<T> {
             ...fetchOptions,
             async onRequest({ options }: FetchContext) {
                 /* Apply JWT before Request if exist */
-                if (!jwt.value) return
+                if (!jwt.value && !with_credential) return
 
                 const headers = new Headers(options.headers)
                 headers.set("Authorization", `Bearer ${jwt.value}`)
@@ -48,12 +49,10 @@ class FetchFactory<T> {
                     jwt.value = null
                 }
 
-                throw new ApiException({
-                    message: "Api Error",
-                    response: response,
-                    status_code: response?.status,
-                    error: error,
-                })
+                if (process.client) {
+                    if (response?.status == 401)
+                        throw new ApiUnauthenticatedException(response, error)
+                }
             },
         })
     }

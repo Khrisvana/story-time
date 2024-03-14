@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ApiException from "~/exceptions/ApiException"
+import ApiUnauthenticatedException from "~/exceptions/ApiUnauthenticatedException"
 import { fields, validationSchema } from "~/forms/StoryForm"
 
 const toast = useToast()
@@ -12,7 +12,14 @@ const { values, handleSubmit } = useForm({
 const isLoading = ref(false)
 const formFields: Ref<any> = ref([])
 
-const { data: categoryData } = await $api.category.getCategories()
+const { data: categoryData, error } = await $api.category.getCategories()
+
+if (error.value instanceof ApiUnauthenticatedException) {
+    toast.error(error.value.data().error.message)
+} else {
+    console.log(error)
+}
+
 const categoryOptions = categoryData.value.data.map(
     (item: any, index: string | number) => {
         return { value: item.id, name: item.name }
@@ -41,7 +48,7 @@ const submitForm = handleSubmit(async (values) => {
 
         await navigateTo({ path: "/user/story" })
     } catch (error: any) {
-        if (error instanceof ApiException) {
+        if (error instanceof ApiUnauthenticatedException) {
             toast.error(error.data().error.message)
         } else {
             console.log(error)

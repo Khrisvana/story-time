@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ApiException from "~/exceptions/ApiException"
+import ApiUnauthenticatedException from "~/exceptions/ApiUnauthenticatedException"
 import { fields, validationSchema } from "~/forms/RegisterForm"
 
 const { $api } = useNuxtApp()
@@ -18,7 +18,7 @@ const submitForm = handleSubmit(async (values) => {
         await $api.auth.register(values)
         registrationSuccess.value = true
     } catch (error: any) {
-        if (error instanceof ApiException) {
+        if (error instanceof ApiUnauthenticatedException) {
             toast.error(error.data().error.message)
         } else {
             console.log(error)

@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import ApiUnauthenticatedException from "~/exceptions/ApiUnauthenticatedException"
+
 const { $api } = useNuxtApp()
 
+const toast = useToast()
 const route = useRoute()
 const config = useRuntimeConfig()
 const bookmark = useBookmarkStore()
@@ -9,9 +12,24 @@ onMounted(() => {
     bookmark.initBookmark()
 })
 
-const { data: story, pending } = await $api.stories.getStory(route.params.id)
+const story = ref()
 
-if (!story) {
+async function fetcher() {
+    try {
+        const { data, pending } = await $api.stories.getStory(route.params.id)
+        story.value = data.value
+    } catch (error) {
+        if (error instanceof ApiUnauthenticatedException) {
+            toast.error(error.data().error.message)
+        } else {
+            console.log(error)
+        }
+    }
+}
+
+await fetcher()
+
+if (!story.value) {
     throw createError({
         statusCode: 404,
         statusMessage: "Page Not Found",
@@ -139,8 +157,7 @@ const toggleBookmark = () => {
     &__author {
         position: sticky;
         top: calc(
-            $default-content-margin-top + $default-content-padding-top +
-                1rem
+            $default-content-margin-top + $default-content-padding-top + 1rem
         );
         display: flex;
         align-items: center;

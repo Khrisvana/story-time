@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Cropper } from "vue-advanced-cropper"
 import "vue-advanced-cropper/dist/style.css"
-import ApiException from "~/exceptions/ApiException"
+import ApiUnauthenticatedException from "~/exceptions/ApiUnauthenticatedException"
 
 const { $api, $bModal } = useNuxtApp()
 
@@ -83,7 +83,7 @@ async function onCrop() {
 
                 $bModal.hide("crop-modal")
             } catch (error) {
-                if (error instanceof ApiException) {
+                if (error instanceof ApiUnauthenticatedException) {
                     toast.error(error.data().error.message)
                 } else {
                     console.log(error)

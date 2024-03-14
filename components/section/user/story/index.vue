@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import ApiException from "~/exceptions/ApiException"
+import ApiUnauthenticatedException from "~/exceptions/ApiUnauthenticatedException"
 
 const user = useUserStore()
 const { $api, $bModal } = useNuxtApp()
@@ -20,11 +20,19 @@ const pagination: Ref<IPagination> = ref({} as IPagination)
 const list: Ref<Array<IStory>> = ref([])
 
 const fetchStories = async () => {
-    const { data } = await $api.stories.getStories({
-        params: queryParams.value,
-    })
-    list.value = data.value.data
-    pagination.value = data.value.meta.pagination
+    try {
+        const { data } = await $api.stories.getStories({
+            params: queryParams.value,
+        })
+        list.value = data.value.data
+        pagination.value = data.value.meta.pagination
+    } catch (error) {
+        if (error instanceof ApiUnauthenticatedException) {
+            toast.error(error.data().error.message)
+        } else {
+            console.log(error)
+        }
+    }
 }
 
 fetchStories()
@@ -57,7 +65,7 @@ const onDelete = async () => {
         await fetchStories()
         $bModal.hide("delete-modal")
     } catch (error) {
-        if (error instanceof ApiException) {
+        if (error instanceof ApiUnauthenticatedException) {
             toast.error(error.data().error.message)
         } else {
             console.log(error)
@@ -88,12 +96,18 @@ const onDelete = async () => {
                 <thead>
                     <tr>
                         <th scope="col">Title</th>
-                        <th scope="col" style="min-width: 150px;">Last Update</th>
+                        <th scope="col" style="min-width: 150px">
+                            Last Update
+                        </th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(story, index) in list" :key="story.id" v-if="list.length > 0">
+                    <tr
+                        v-for="(story, index) in list"
+                        :key="story.id"
+                        v-if="list.length > 0"
+                    >
                         <th scope="row">
                             <NuxtLink
                                 :to="`/story/${story.id}`"

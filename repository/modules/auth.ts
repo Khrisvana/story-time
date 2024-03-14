@@ -26,6 +26,7 @@ class AuthModule extends FetchFactory<any> {
             url,
             payload, // body
             opt,
+            false
         )
     }
 
@@ -37,6 +38,7 @@ class AuthModule extends FetchFactory<any> {
                 url,
                 payload, // body
                 opt,
+                false
             )
         })
 
