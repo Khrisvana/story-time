@@ -1,5 +1,6 @@
 // 3rd's
 import type { $Fetch, FetchOptions, FetchContext } from "ofetch"
+import ApiBadRequestException from "~/exceptions/ApiBadRequestException"
 import ApiNotFoundException from "~/exceptions/ApiNotFoundException"
 import ApiUnauthenticatedException from "~/exceptions/ApiUnauthenticatedException"
 
@@ -55,6 +56,9 @@ class FetchFactory<T> {
                 }
 
                 if (process.client) {
+                    if (response?.status == 400)
+                        throw new ApiBadRequestException(response, error)
+
                     if (response?.status == 401)
                         throw new ApiUnauthenticatedException(response, error)
                 }

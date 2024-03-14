@@ -8,21 +8,30 @@ const { $api } = useNuxtApp()
 
 const isLoading = ref(false)
 const formFields: Ref<any> = ref([])
+const storyData = ref()
+const categoryData = ref()
 
-const { data: storyData, error } = await $api.stories.getStory(route.params.id)
-if (error.value instanceof ApiUnauthenticatedException) {
-    toast.error(error.value.data().error.message)
-} else {
-    console.log(error)
-}
-const { data: categoryData, error: categoryError } =
-    await $api.category.getCategories()
+const fetcher = async () => {
+    try {
+        const { data, error } = await $api.stories.getStory(route.params.id)
+        if (error.value) throw error.value
 
-if (categoryError.value instanceof ApiUnauthenticatedException) {
-    toast.error(categoryError.value.data().categoryError.message)
-} else {
-    console.log(error)
+        storyData.value = data.value
+
+        const { data: categoryRes, error: categoryError } =
+            await $api.category.getCategories()
+        if (categoryError.value) throw categoryError.value
+        categoryData.value = categoryRes.value
+    } catch (error: any) {
+        if (error.cause instanceof ApiUnauthenticatedException) {
+            toast.error(error.value.data().error.message)
+        } else {
+            console.log(error.value)
+        }
+    }
 }
+
+await fetcher()
 
 const categoryOptions = categoryData.value.data.map(
     (item: any, index: string | number) => {
@@ -71,7 +80,7 @@ const submitForm = handleSubmit(async (values) => {
             await $api.stories.uploadStoryImage(image_payload)
         }
 
-        toast.success("Successful edit story")
+        toast.success("Successfully edit story")
 
         await navigateTo({ path: "/user/story" })
     } catch (error: any) {
@@ -99,7 +108,7 @@ const submitForm = handleSubmit(async (values) => {
             <fieldset>
                 <UiDynamicForm :fields="formFields" />
             </fieldset>
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-end mt-5">
                 <UiButton
                     type="nuxt-link"
                     to="/user/story"

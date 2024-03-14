@@ -26,6 +26,8 @@ const submitForm = handleSubmit(async (values) => {
         await $api.user.updateUser(values)
         const { data: userData } = await $api.user.getUser()
         userStore.setUserProfile(userData.value?.data)
+
+        toast.success("Successfully edit profile")
     } catch (error: any) {
         if (error instanceof ApiUnauthenticatedException) {
             toast.error(error.data().error.message)

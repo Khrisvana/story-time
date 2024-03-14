@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ApiBadRequestException from "~/exceptions/ApiBadRequestException";
 import ApiUnauthenticatedException from "~/exceptions/ApiUnauthenticatedException"
 import { fields, validationSchema } from "~/forms/ChangePasswordForm"
 
@@ -28,7 +29,7 @@ const submitForm = handleSubmit(async (values: object) => {
         const { data: userData } = await $api.user.getUser()
         userStore.setUserProfile(userData.value?.data)
     } catch (error: any) {
-        if (error instanceof ApiUnauthenticatedException) {
+        if (error instanceof ApiUnauthenticatedException || error instanceof ApiBadRequestException) {
             toast.error(error.data().error.message)
         } else {
             console.log(error)

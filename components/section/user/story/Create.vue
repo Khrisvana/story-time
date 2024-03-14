@@ -11,14 +11,22 @@ const { values, handleSubmit } = useForm({
 
 const isLoading = ref(false)
 const formFields: Ref<any> = ref([])
-
-const { data: categoryData, error } = await $api.category.getCategories()
-
-if (error.value instanceof ApiUnauthenticatedException) {
-    toast.error(error.value.data().error.message)
-} else {
-    console.log(error)
+const categoryData = ref()
+const fetcher = async () => {
+    try {
+        const { data, error } = await $api.category.getCategories()
+        if (error.value) throw error.value
+        categoryData.value = data.value
+    } catch (error: any) {
+        if (error.cause instanceof ApiUnauthenticatedException) {
+            toast.error(error.value.data().error.message)
+        } else {
+            console.log(error.value)
+        }
+    }
 }
+
+await fetcher()
 
 const categoryOptions = categoryData.value.data.map(
     (item: any, index: string | number) => {
@@ -44,7 +52,7 @@ const submitForm = handleSubmit(async (values) => {
 
         await $api.stories.uploadStoryImage(image_payload)
 
-        toast.success('Successful create story')
+        toast.success("Successfully create story")
 
         await navigateTo({ path: "/user/story" })
     } catch (error: any) {
@@ -62,7 +70,8 @@ const submitForm = handleSubmit(async (values) => {
 <template>
     <div class="card p-3">
         <h3 class="d-flex align-items-center">
-            <NuxtLink to="/user/story"
+            <NuxtLink
+                to="/user/story"
                 class="text-primary me-3 d-flex align-items-center"
                 ><Icon name="material-symbols:arrow-back-rounded" /></NuxtLink
             >Create Story
@@ -71,7 +80,7 @@ const submitForm = handleSubmit(async (values) => {
             <fieldset>
                 <UiDynamicForm :fields="formFields" />
             </fieldset>
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-end mt-5">
                 <UiButton
                     type="nuxt-link"
                     to="/user/story"
