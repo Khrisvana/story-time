@@ -29,7 +29,7 @@ const data = computed(() => {
     <div class="row">
         <UiStory
             v-if="data.length > 0"
-            class="col-12 col-md-6 col-lg-3"
+            class="col-12 col-md-6 col-lg-4"
             v-for="item in data"
             :key="item.id"
             :story="item"
