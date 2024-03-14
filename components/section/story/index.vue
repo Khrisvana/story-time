@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ApiNotFoundException from "~/exceptions/ApiNotFoundException"
 import ApiUnauthenticatedException from "~/exceptions/ApiUnauthenticatedException"
 
 const { $api } = useNuxtApp()
@@ -16,25 +17,27 @@ const story = ref()
 
 async function fetcher() {
     try {
-        const { data, pending } = await $api.stories.getStory(route.params.id)
+        const { data, error } = await $api.stories.getStory(route.params.id)
+
+        if (data.value?.data == null) throw new ApiNotFoundException(null)
+        if (error) throw error.value
+        
         story.value = data.value
-    } catch (error) {
-        if (error instanceof ApiUnauthenticatedException) {
+    } catch (error: any) {
+        if (error.cause instanceof ApiUnauthenticatedException) {
             toast.error(error.data().error.message)
+        } else if (error instanceof ApiNotFoundException) {
+            throw createError({
+                statusCode: 404,
+                statusMessage: "Page Not Found",
+            })
         } else {
-            console.log(error)
+            console.log(error);
         }
     }
 }
 
 await fetcher()
-
-if (!story.value) {
-    throw createError({
-        statusCode: 404,
-        statusMessage: "Page Not Found",
-    })
-}
 
 const storyDetail = computed(() => {
     return story.value?.data
@@ -44,8 +47,8 @@ const storyCover = computed(() => {
     const data = story.value?.data
 
     return {
-        img: config.public.baseURL + (data!.cover_image?.url ?? ""),
-        alt: data!.cover_image?.alternativeText,
+        img: config.public.baseURL + (data?.cover_image?.url ?? ""),
+        alt: data?.cover_image?.alternativeText,
     }
 })
 
@@ -53,14 +56,14 @@ const authorPicture = computed(() => {
     const data = story.value?.data
 
     return {
-        img: config.public.baseURL + (data!.author?.profile_picture?.url ?? ""),
-        alt: data!.author?.profile_picture?.name ?? "",
+        img: config.public.baseURL + (data?.author?.profile_picture?.url ?? ""),
+        alt: data?.author?.profile_picture?.name ?? "",
     }
 })
 
 const createdAt = computed(() => {
     const data = story.value?.data
-    const date = new Date(data!.createdAt ?? "")
+    const date = new Date(data?.createdAt ?? "")
 
     const day = date.toLocaleDateString("en-US", { day: "2-digit" })
     const month = date.toLocaleDateString("en-US", { month: "long" })
@@ -70,7 +73,7 @@ const createdAt = computed(() => {
 })
 
 const isBookmarked = computed(() => {
-    let index = bookmark.bookmarkIds.indexOf(story.value?.data.id)
+    let index = bookmark.bookmarkIds.indexOf(story.value?.data?.id)
     if (index <= -1) return false
     return true
 })
@@ -88,7 +91,7 @@ const toggleBookmark = () => {
         <div class="content row">
             <div class="col-12 col-md-8 story">
                 <h2 class="mt-3 fw-bold">
-                    {{ storyDetail!.title }}
+                    {{ storyDetail?.title }}
                 </h2>
                 <p class="text-secondary mb-3">{{ createdAt }}</p>
 
@@ -107,7 +110,7 @@ const toggleBookmark = () => {
 
                 <div
                     class="story__content mt-3"
-                    v-html="storyDetail!.content"
+                    v-html="storyDetail?.content"
                 ></div>
             </div>
             <div class="col-12 col-md-4 position-relative">
@@ -122,10 +125,10 @@ const toggleBookmark = () => {
 
                     <div class="text-center">
                         <p class="mb-0 fw-semibold">
-                            {{ storyDetail!.author?.name ?? "" }}
+                            {{ storyDetail?.author?.name ?? "" }}
                         </p>
                         <p class="text-secondary mb-0">
-                            {{ storyDetail!.author?.biodata ?? "" }}
+                            {{ storyDetail?.author?.biodata ?? "" }}
                         </p>
                     </div>
                 </div>

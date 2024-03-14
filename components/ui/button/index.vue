@@ -17,7 +17,6 @@ const props = withDefaults(defineProps<Props>(), {
         v-if="type == 'button'"
         type="button"
         class="btn"
-        :="$attrs"
         :disabled="loading"
     >
         <slot v-if="!loading" />
@@ -28,7 +27,6 @@ const props = withDefaults(defineProps<Props>(), {
         v-else-if="type == 'submit'"
         type="submit"
         class="btn"
-        :="$attrs"
         :disabled="loading"
     >
         <slot v-if="!loading" />
@@ -39,7 +37,6 @@ const props = withDefaults(defineProps<Props>(), {
         v-else-if="type == 'nuxt-link'"
         :to="link"
         class="btn"
-        :="$attrs"
         :disabled="loading"
     >
         <slot v-if="!loading" />
@@ -50,7 +47,6 @@ const props = withDefaults(defineProps<Props>(), {
         v-else-if="type == 'link'"
         :href="link"
         class="btn"
-        :="$attrs"
         :disabled="loading"
     >
         <slot v-if="!loading" />
@@ -60,7 +56,6 @@ const props = withDefaults(defineProps<Props>(), {
     <label
         v-else-if="type == 'label'"
         class="btn"
-        v-bind="$attrs"
         :disabled="loading"
     >
         <slot v-if="!loading" />

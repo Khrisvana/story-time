@@ -7,7 +7,7 @@ const props = defineProps<Prop>()
 </script>
 
 <template>
-    <button class="btn story__bookmark shadow" :="$attrs">
+    <button class="btn story__bookmark shadow">
         <ClientOnly>
             <Icon
                 v-show="!is_active"

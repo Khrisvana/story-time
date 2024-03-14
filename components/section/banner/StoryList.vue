@@ -39,7 +39,7 @@ const fetchStories = async (loadMore: boolean = false) => {
         list.value = stories.value?.data
     } catch (error: any) {
         if (error.cause instanceof ApiUnauthenticatedException) {
-            return toast.error(error.message)
+            return toast.error(error.data().error.message)
         } else {
             return console.log(error)
         }

@@ -69,6 +69,7 @@ async function onCrop() {
     if (cropperResult.canvas) {
         cropperResult.canvas.toBlob(async (blob: Blob) => {
             try {
+                isLoading.value = true
                 const file = new File([blob], "avatar_", { type: "image/jpeg" })
                 payload.append("files", file)
 
@@ -88,6 +89,8 @@ async function onCrop() {
                 } else {
                     console.log(error)
                 }
+            } finally {
+                isLoading.value = false
             }
         }, "image/jpeg")
     }
@@ -127,6 +130,7 @@ async function onCrop() {
             <template #footer>
                 <UiButton
                     class="btn-outline-primary me-2"
+                    :disabled="isLoading"
                     @click="$bModal.hide('crop-modal')"
                     >Close</UiButton
                 >

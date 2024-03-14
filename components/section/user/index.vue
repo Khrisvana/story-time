@@ -35,11 +35,13 @@ const profilePicture = computed(() => {
                 <div
                     class="col-lg-4 col-md-6 col-12 mb-3 mb-md-0 profile__avatar"
                 >
-                    <img
-                        class="profile__avatar-img rounded-circle mb-3"
-                        :src="profilePicture"
-                        alt="profile picture"
-                    />
+                    <div class="profile__avatar-img mb-3">
+                        <img
+                            class="w-100 rounded-circle"
+                            :src="profilePicture"
+                            alt="profile picture"
+                        />
+                    </div>
                     <SectionUserAvatar />
                 </div>
                 <div class="col-lg-8 col-md-6 col-12">
@@ -94,8 +96,6 @@ const profilePicture = computed(() => {
         &-img {
             width: 200px;
             height: 200px;
-            min-width: 200px;
-            min-height: 200px;
             max-width: 100%;
             max-height: 100%;
         }

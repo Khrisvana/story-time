@@ -65,7 +65,7 @@ function getImage(file: string | File) {
 <template>
     <p v-if="label" class="form-label">{{ label }}</p>
     <div class="image-input">
-        <Field v-model="model" :name v-slot="{ errors, field }" v-bind="$attrs">
+        <Field v-model="model" :name v-slot="{ errors, field }">
             <label :for="id" class="image-input__label" v-show="!displayImage && !field.value" :class="{'invalid': errors.length > 0}">
                 <Icon name="material-symbols:add-circle-rounded" class="fs-5" />
                 Add Image

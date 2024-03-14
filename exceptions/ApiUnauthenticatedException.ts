@@ -3,10 +3,10 @@ import ApiException from "./ApiException"
 export default class ApiUnauthenticatedException extends ApiException{
     constructor( response: any, error: any ){
         super({
-            error: null,
-            message : "tidak terotentikasi",
+            error,
+            message : "Unauthenticated",
             status_code : 401,
-            response: null
+            response
         })
     }
 }

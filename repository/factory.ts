@@ -1,5 +1,6 @@
 // 3rd's
 import type { $Fetch, FetchOptions, FetchContext } from "ofetch"
+import ApiNotFoundException from "~/exceptions/ApiNotFoundException"
 import ApiUnauthenticatedException from "~/exceptions/ApiUnauthenticatedException"
 
 /*
@@ -45,8 +46,12 @@ class FetchFactory<T> {
             },
             async onResponseError({ response, error, request }: FetchContext) {
                 /* Remove Token on Error Code 401 */
-                if (response && response.status == 401) {
+                if (response?.status == 401) {
                     jwt.value = null
+                }
+
+                if (response?.status == 404) {
+                    throw new ApiNotFoundException(error)
                 }
 
                 if (process.client) {

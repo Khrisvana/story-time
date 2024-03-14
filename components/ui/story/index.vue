@@ -44,7 +44,6 @@ const toggleBookmark = () => {
 <template>
     <div class="story">
         <NuxtLink
-            :="$attrs"
             :to="`/story/${story.id}`"
             class="card w-100 h-100 rounded-0 border-0"
         >
